@@ -1,8 +1,5 @@
 package com.zsq.musiclibrary.util;
 
-import java.io.InputStream;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -17,7 +14,6 @@ import android.media.ThumbnailUtils;
  */
 public class ImageUtil {
 
-	private static final String TAG = "ImageUtil";
 	public static final int default_width = 200;
 	public static final int default_height = 200;
 

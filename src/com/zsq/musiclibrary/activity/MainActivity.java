@@ -1,7 +1,6 @@
 package com.zsq.musiclibrary.activity;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,8 +23,7 @@ import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.OpenFileUtil;
 
-public class MainActivity extends ActivityBase implements OnClickListener,
-		OnItemClickListener {
+public class MainActivity extends ActivityBase implements OnClickListener, OnItemClickListener {
 	private static final long WAIT_TIME = 2000;
 	private static final int SEARCH_REQUEST_CODE = 1;
 	private static final int ABOUT_REQUEST_CODE = 2;
@@ -80,9 +78,7 @@ public class MainActivity extends ActivityBase implements OnClickListener,
 		if (null == mCurrentFile) {
 			return;
 		}
-		if (null != mResDir
-				&& mCurrentFile.getAbsolutePath().equals(
-						mResDir.getAbsolutePath())) {
+		if (null != mResDir && mCurrentFile.getAbsolutePath().equals(mResDir.getAbsolutePath())) {
 			mLlBack.setVisibility(View.GONE);
 		} else {
 			mLlBack.setVisibility(View.VISIBLE);
@@ -108,8 +104,7 @@ public class MainActivity extends ActivityBase implements OnClickListener,
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		File tempFile = (File) parent.getAdapter().getItem(position);
 		if (null == tempFile || !tempFile.exists()) {
 			return;
@@ -118,20 +113,16 @@ public class MainActivity extends ActivityBase implements OnClickListener,
 			mCurrentFile = tempFile;
 			getFileList();
 		} else if (tempFile.isFile()) {
-			Intent intent = new Intent(MainActivity.this,
-					MusicDetailActivity.class);
+			Intent intent = new Intent(MainActivity.this, MusicDetailActivity.class);
 			ArrayList<File> imageFileList = new ArrayList<File>();
 			int size = mFileList.size();
 			for (int i = 0; i < size; i++) {
 				File file = mFileList.get(i);
 				if (!file.isDirectory()
-						&& OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil
-								.getFileEnding(file, MainActivity.this)) {
+						&& OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil.getFileEnding(file, MainActivity.this)) {
 					imageFileList.add(file);
-					if (tempFile.getAbsolutePath().equals(
-							file.getAbsolutePath())) {
-						intent.putExtra(ConstantSet.KEY_INTENT_IMG_POSITION,
-								imageFileList.size() - 1);
+					if (tempFile.getAbsolutePath().equals(file.getAbsolutePath())) {
+						intent.putExtra(ConstantSet.KEY_INTENT_IMG_POSITION, imageFileList.size() - 1);
 					}
 				}
 			}
@@ -143,18 +134,18 @@ public class MainActivity extends ActivityBase implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_with_back_title_btn_left:
-			if (null != mCurrentFile) {
-				mCurrentFile = mCurrentFile.getParentFile();
-				getFileList();
-			}
-			break;
-		case R.id.title_with_back_title_btn_right:
-			Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-			startActivityForResult(intent, SEARCH_REQUEST_CODE);
-			break;
-		default:
-			break;
+			case R.id.title_with_back_title_btn_left:
+				if (null != mCurrentFile) {
+					mCurrentFile = mCurrentFile.getParentFile();
+					getFileList();
+				}
+				break;
+			case R.id.title_with_back_title_btn_right:
+				Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+				startActivityForResult(intent, SEARCH_REQUEST_CODE);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -164,46 +155,41 @@ public class MainActivity extends ActivityBase implements OnClickListener,
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (RESULT_OK != resultCode) {
 			return;
 		}
 		switch (requestCode) {
-		case ABOUT_REQUEST_CODE:
-			mResDir = FileUtil.getResDir(this);
-			mCurrentFile = mResDir;
-			getFileList();
-			break;
-		case SEARCH_REQUEST_CODE:
-			File tempFile = (File) intent
-					.getSerializableExtra(ConstantSet.KEY_INTENT_CURRENT_FILE);
-			if (null != tempFile) {
-				mCurrentFile = tempFile;
+			case ABOUT_REQUEST_CODE:
+				mResDir = FileUtil.getResDir(this);
+				mCurrentFile = mResDir;
 				getFileList();
-			}
-			break;
+				break;
+			case SEARCH_REQUEST_CODE:
+				File tempFile = (File) intent.getSerializableExtra(ConstantSet.KEY_INTENT_CURRENT_FILE);
+				if (null != tempFile) {
+					mCurrentFile = tempFile;
+					getFileList();
+				}
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (null != mCurrentFile
-				&& null != mResDir
-				&& !mCurrentFile.getAbsolutePath().equals(
-						mResDir.getAbsolutePath())) {
+		if (null != mCurrentFile && null != mResDir
+				&& !mCurrentFile.getAbsolutePath().equals(mResDir.getAbsolutePath())) {
 			mCurrentFile = mCurrentFile.getParentFile();
 			getFileList();
 			return;
 		} else {
 			long currentTime = System.currentTimeMillis();
 			if ((currentTime - mTouchTime) >= WAIT_TIME) {
-				Toast.makeText(this, getString(R.string.once_press_quit),
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.once_press_quit), Toast.LENGTH_SHORT).show();
 				mTouchTime = currentTime;
 				return;
 			} else {

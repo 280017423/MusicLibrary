@@ -29,9 +29,7 @@ import android.widget.TextView;
  * 
  */
 public class UIUtil {
-	private static final String TAG = "UIUtil";
 	private static final Object mSync = new Object();
-	private static final int DEFAUTL_COOLING_TIME = 3000;
 	private static final List<String> ACTION_LIST = new ArrayList<String>();
 
 	/**
@@ -62,11 +60,9 @@ public class UIUtil {
 	 * @param tv
 	 *            需要操作的textview
 	 */
-	public static void setColorfulText(int startPos, int endPos, String text,
-			int color, TextView tv) {
+	public static void setColorfulText(int startPos, int endPos, String text, int color, TextView tv) {
 		SpannableStringBuilder builder = new SpannableStringBuilder(text);
-		builder.setSpan(new ForegroundColorSpan(color), startPos, endPos,
-				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		builder.setSpan(new ForegroundColorSpan(color), startPos, endPos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		tv.setText(builder);
 	}
 
@@ -82,11 +78,9 @@ public class UIUtil {
 	 * @param tv
 	 *            需要操作的textview
 	 */
-	public static void setDeleteLineText(int startPos, int endPos, String text,
-			TextView tv) {
+	public static void setDeleteLineText(int startPos, int endPos, String text, TextView tv) {
 		SpannableStringBuilder style = new SpannableStringBuilder(text);
-		style.setSpan(new StrikethroughSpan(), startPos, endPos,
-				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		style.setSpan(new StrikethroughSpan(), startPos, endPos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		tv.setText(style);
 	}
 
@@ -121,8 +115,7 @@ public class UIUtil {
 	public static ImageView getImageViewFromBitmap(Context ctx, Bitmap bitmap) {
 		ImageView imageView = new ImageView(ctx);
 		imageView.setLayoutParams(new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.FILL_PARENT));
+				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 		imageView.setAdjustViewBounds(true);
 		imageView.setImageBitmap(bitmap);
 		return imageView;
@@ -139,18 +132,14 @@ public class UIUtil {
 	 *            该View的高度
 	 * @return 返回Bitmap对象
 	 */
-	public static Bitmap getBitmapFromView(View view, int width, int height,
-			Config bitmapConfig) {
-		int widthSpec = View.MeasureSpec.makeMeasureSpec(width,
-				View.MeasureSpec.EXACTLY);
-		int heightSpec = View.MeasureSpec.makeMeasureSpec(height,
-				View.MeasureSpec.EXACTLY);
+	public static Bitmap getBitmapFromView(View view, int width, int height, Config bitmapConfig) {
+		int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+		int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
 		view.measure(widthSpec, heightSpec);
 		view.layout(0, 0, width, height);
 		Bitmap bitmap = Bitmap.createBitmap(width, height, bitmapConfig);
 		Canvas canvas = new Canvas(bitmap);
-		canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
-				| Paint.FILTER_BITMAP_FLAG));
+		canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
 		view.draw(canvas);
 		return bitmap;
 	}

@@ -13,7 +13,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.zsq.musiclibrary.activity.MainActivity;
 import com.zsq.musiclibrary.listener.OnFileSearchListener;
 
 /**

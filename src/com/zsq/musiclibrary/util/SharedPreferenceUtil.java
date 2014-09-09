@@ -27,7 +27,6 @@ import android.content.SharedPreferences.Editor;
  */
 public class SharedPreferenceUtil {
 
-	private static final String TAG = "SharedPreferenceUtil";
 	private static String separator = "_";
 	// 无效标记
 	public static final int INVALID_CODE = -1;

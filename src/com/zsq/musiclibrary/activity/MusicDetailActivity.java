@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.zsq.musiclibrary.R;
@@ -32,10 +33,8 @@ public class MusicDetailActivity extends ActivityBase {
 	private void initVariables() {
 		Intent intent = getIntent();
 		if (null != intent) {
-			mImgsList = (ArrayList<File>) intent
-					.getSerializableExtra(ConstantSet.KEY_INTENT_IMGS_LIST);
-			mPosition = intent.getIntExtra(ConstantSet.KEY_INTENT_IMG_POSITION,
-					0);
+			mImgsList = (ArrayList<File>) intent.getSerializableExtra(ConstantSet.KEY_INTENT_IMGS_LIST);
+			mPosition = intent.getIntExtra(ConstantSet.KEY_INTENT_IMG_POSITION, 0);
 		} else {
 			finish();
 		}
@@ -49,14 +48,6 @@ public class MusicDetailActivity extends ActivityBase {
 		mViewPager.setCurrentItem(mPosition, false);
 		mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
 		mTvMusicName.setText(mImgsList.get(mPosition).getName());
-		// mTvCurrentTotal.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View arg0) {
-		// mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
-		// }
-		// });
-
 	}
 
 	private void setListener() {
@@ -65,8 +56,7 @@ public class MusicDetailActivity extends ActivityBase {
 			@Override
 			public void onPageSelected(int postion) {
 				mPosition = postion;
-				mTvCurrentTotal.setText((mPosition + 1) + "/"
-						+ mImgsList.size());
+				mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
 				mTvMusicName.setText(mImgsList.get(postion).getName());
 			}
 
@@ -80,7 +70,16 @@ public class MusicDetailActivity extends ActivityBase {
 
 			}
 		});
+	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+			mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+			mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }
