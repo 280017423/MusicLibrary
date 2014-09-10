@@ -6,4 +6,6 @@ public interface OnFileSearchListener {
 
 	void onFileFound(File file);
 
+	void onSearchFinish();
+
 }

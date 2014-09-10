@@ -28,20 +28,27 @@ import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.OpenFileUtil;
 import com.zsq.musiclibrary.util.StringUtil;
+import com.zsq.musiclibrary.widget.LoadingUpView;
 
 public class SearchActivity extends ActivityBase implements OnClickListener, OnItemClickListener {
 
 	private static final int FILE_FOUND_CODE = 1;
+	private static final int FILE_SEARCH_FINISH_CODE = 2;
 	private LinearLayout mLlBack;
 	private EditText mEdtSearch;
 	private GridView mGvRootFolder;
 	private FolderAdapter mFilAdapter;
 	private ArrayList<File> mFileList;
+	private LinearLayout mLlSearch;
+	private LoadingUpView mLoadingUpView;
 	private Handler mHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+				case FILE_SEARCH_FINISH_CODE:
+					dismissLoadingUpView(mLoadingUpView);
+					break;
 				case FILE_FOUND_CODE:
 					if (null != msg.obj) {
 						File file = (File) msg.obj;
@@ -80,10 +87,12 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 	private void initVariables() {
 		mFileList = new ArrayList<File>();
 		mFilAdapter = new FolderAdapter(this, mFileList);
+		mLoadingUpView = new LoadingUpView(this, true);
 	}
 
 	private void setListener() {
 		mLlBack.setOnClickListener(this);
+		mLlSearch.setOnClickListener(this);
 		mGvRootFolder.setOnItemClickListener(this);
 		mEdtSearch.addTextChangedListener(new TextWatcher() {
 
@@ -97,27 +106,11 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 
 			@Override
 			public void afterTextChanged(Editable editable) {
-				mFileList.clear();
-				mFilAdapter.notifyDataSetChanged();
-				final String kyeWord = editable.toString();
+				final String kyeWord = mEdtSearch.getText().toString().trim();
 				if (!StringUtil.isNullOrEmpty(kyeWord)) {
-					new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							FileUtil.searchFile(kyeWord, FileUtil.getResDir(SearchActivity.this),
-									new OnFileSearchListener() {
-
-										@Override
-										public void onFileFound(File file) {
-											Message msg = mHandler.obtainMessage();
-											msg.what = FILE_FOUND_CODE;
-											msg.obj = file;
-											mHandler.sendMessage(msg);
-										}
-									});
-						}
-					}).start();
+					mLlSearch.setVisibility(View.VISIBLE);
+				} else {
+					mLlSearch.setVisibility(View.INVISIBLE);
 				}
 			}
 		});
@@ -127,10 +120,15 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 		mGvRootFolder = (GridView) findViewById(R.id.gv_search_folder);
 		mGvRootFolder.setAdapter(mFilAdapter);
 		mLlBack = (LinearLayout) findViewById(R.id.title_with_back_title_btn_left);
+		mLlSearch = (LinearLayout) findViewById(R.id.title_with_back_title_btn_right);
+		TextView tvRight = (TextView) findViewById(R.id.tv_title_with_right);
+		tvRight.setBackgroundResource(R.drawable.tongyong_button_bg);
+		tvRight.setText(R.string.search);
 		mEdtSearch = (EditText) findViewById(R.id.edt_search);
 		TextView mTvBack = (TextView) findViewById(R.id.tv_title_with_back_left);
 		mTvBack.setText(R.string.title_back_text);
 		mTvBack.setBackgroundResource(R.drawable.btn_back_bg);
+		mLlSearch.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -139,12 +137,64 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 			case R.id.title_with_back_title_btn_left:
 				back();
 				break;
+			case R.id.title_with_back_title_btn_right:
+				search();
+				break;
 			case R.id.btn_search_clear:
 				mEdtSearch.setText("");
 				break;
 			default:
 				break;
 		}
+	}
+
+	private void search() {
+
+		final String kyeWord = mEdtSearch.getText().toString().trim();
+		if (StringUtil.isNullOrEmpty(kyeWord)) {
+			return;
+		}
+		showLoadingUpView(mLoadingUpView);
+		mFileList.clear();
+		mFilAdapter.notifyDataSetChanged();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				FileUtil.searchFile(kyeWord, FileUtil.getResDir(SearchActivity.this), new OnFileSearchListener() {
+
+					@Override
+					public void onFileFound(File file) {
+						if (null != file
+								&& FileUtil.getResDir(SearchActivity.this).getAbsolutePath()
+										.equals(file.getAbsolutePath())) {
+							onSearchFinish();
+							return;
+						}
+						if (file.isFile()) {
+							sendHandler(FILE_FOUND_CODE, file);
+						} else {
+							String fileName = file.getName().toLowerCase();
+							if (fileName.indexOf(kyeWord.toLowerCase()) > -1) {
+								sendHandler(FILE_FOUND_CODE, file);
+							}
+						}
+					}
+
+					@Override
+					public void onSearchFinish() {
+						mHandler.sendEmptyMessage(FILE_SEARCH_FINISH_CODE);
+					}
+				});
+			}
+		}).start();
+	}
+
+	private void sendHandler(int what, Object file) {
+		Message msg = mHandler.obtainMessage();
+		msg.what = what;
+		msg.obj = file;
+		mHandler.sendMessage(msg);
 	}
 
 	@Override

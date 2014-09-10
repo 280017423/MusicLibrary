@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.widget.TextView;
@@ -14,11 +13,13 @@ import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.adapter.MusicDetailAdapter;
 import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.FileUtil;
+import com.zsq.musiclibrary.widget.AutoScrollViewPager;
 
 public class MusicDetailActivity extends ActivityBase {
+	private static final int SCROLL_DURATION = 3;
 	private ArrayList<File> mImgsList;
 	private int mPosition;
-	private ViewPager mViewPager;
+	private AutoScrollViewPager mViewPager;
 	private TextView mTvCurrentTotal;
 	private TextView mTvMusicName;
 
@@ -42,13 +43,14 @@ public class MusicDetailActivity extends ActivityBase {
 	}
 
 	private void initViews() {
-		mViewPager = (ViewPager) findViewById(R.id.vp_photo_view);
+		mViewPager = (AutoScrollViewPager) findViewById(R.id.vp_photo_view);
 		mTvCurrentTotal = (TextView) findViewById(R.id.tv_current_total_num);
 		mTvMusicName = (TextView) findViewById(R.id.tv_current_music_name);
 		mViewPager.setAdapter(new MusicDetailAdapter(this, mImgsList));
 		mViewPager.setCurrentItem(mPosition, false);
 		mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
 		mTvMusicName.setText(FileUtil.getFileNameNoEx(mImgsList.get(mPosition).getName()));
+		mViewPager.setScrollDurationFactor(SCROLL_DURATION);
 	}
 
 	private void setListener() {
@@ -75,11 +77,13 @@ public class MusicDetailActivity extends ActivityBase {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
 		if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 			mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 			mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
 		}
+
 		return super.onKeyDown(keyCode, event);
 	}
 

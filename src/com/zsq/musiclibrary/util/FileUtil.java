@@ -25,8 +25,6 @@ import com.zsq.musiclibrary.listener.OnFileSearchListener;
  * 
  */
 public class FileUtil {
-	private static String ANDROID_SECURE = Environment.getExternalStorageDirectory() + File.separator
-			+ ".android_secure";
 	public static final int BUFSIZE = 256;
 	public static final int COUNT = 320;
 	private static final String TAG = "FileUtils";
@@ -79,24 +77,6 @@ public class FileUtil {
 		File file = new File(filePath);
 		if (!file.exists()) {
 			file.mkdirs();
-		}
-	}
-
-	/**
-	 * 删除指定的文件或目录
-	 * 
-	 * @param filePath
-	 *            文件路径
-	 */
-	public static void delete(String filePath, IOperationProgressListener l) {
-		if (filePath == null) {
-			return;
-		}
-		try {
-			File file = new File(filePath);
-			delete(file, l);
-		} catch (Exception e) {
-			Log.e(TAG, e.toString());
 		}
 	}
 
@@ -296,22 +276,25 @@ public class FileUtil {
 	 * @param listener
 	 *            回调接口
 	 */
-	public static void searchFile(String keyword, File filepath, OnFileSearchListener listener) {
-		File[] files = filepath.listFiles();
+	public static void searchFile(String keyword, File file, OnFileSearchListener listener) {
+		File[] files = file.listFiles();
 		if (files.length > 0) {
-			for (File file : files) {
-				String fileName = file.getName().toLowerCase();
-				if (fileName.indexOf(keyword.toLowerCase()) > -1) {
-					listener.onFileFound(file);
-				}
-				if (file.isDirectory()) {
+			for (File subFile : files) {
+				if (subFile.isDirectory()) {
 					// 如果目录可读就执行（一定要加，不然会挂掉）
-					if (file.canRead()) {
-						searchFile(keyword, file, listener);
+					if (subFile.canRead()) {
+						searchFile(keyword, subFile, listener);
+					}
+				} else {
+					String fileName = subFile.getName().toLowerCase();
+					if (fileName.indexOf(keyword.toLowerCase()) > -1) {
+						listener.onFileFound(subFile);
 					}
 				}
 			}
 		}
+		// 如果是文件，匹配的就回调回去，如果是目录就直接回调回去，，在回调方法里面再做判断，这样做的目的是为了判断是否搜索完毕
+		listener.onFileFound(file);
 	}
 
 	public static File[] listFiles(final Context context, File filepath) {
@@ -333,7 +316,16 @@ public class FileUtil {
 		if (file == null || StringUtil.isNullOrEmpty(newName)) {
 			return false;
 		}
-		String path = file.getParentFile() + File.separator + newName + "." + getExtensionName(file.getName());
+		String path = file.getParentFile() + File.separator + newName;
+		if (!file.isDirectory()) {
+			String extensionName = getExtensionName(file.getName());
+			if (StringUtil.isNullOrEmpty(extensionName)) {
+				extensionName = "";
+			} else {
+				extensionName = "." + extensionName;
+			}
+			path = file.getParentFile() + File.separator + newName + extensionName;
+		}
 		ImageUtil.scanMedia(context, path);
 		return file.renameTo(new File(path));
 	}
@@ -344,13 +336,13 @@ public class FileUtil {
 	 * Created on: 2011-8-2 Author: blueeagle
 	 */
 	public static String getExtensionName(String filename) {
-		if ((filename != null) && (filename.length() > 0)) {
+		if (!StringUtil.isNullOrEmpty(filename)) {
 			int dot = filename.lastIndexOf('.');
 			if ((dot > -1) && (dot < (filename.length() - 1))) {
 				return filename.substring(dot + 1);
 			}
 		}
-		return filename;
+		return "";
 	}
 
 	/*
@@ -359,7 +351,7 @@ public class FileUtil {
 	 * Created on: 2011-8-2 Author: blueeagle
 	 */
 	public static String getFileNameNoEx(String filename) {
-		if ((filename != null) && (filename.length() > 0)) {
+		if (!StringUtil.isNullOrEmpty(filename)) {
 			int dot = filename.lastIndexOf('.');
 			if ((dot > -1) && (dot < (filename.length()))) {
 				return filename.substring(0, dot);

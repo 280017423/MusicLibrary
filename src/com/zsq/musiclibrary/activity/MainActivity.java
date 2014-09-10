@@ -228,13 +228,13 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 
 						@Override
 						public void onFinish() {
-
+							getFileList();
 						}
 
 						@Override
 						public void onFileChanged(File file) {
 							if (null != file && mChoosedFile.getAbsolutePath().equals(file.getAbsolutePath())) {
-								getFileList();
+								onFinish();
 							}
 						}
 					});
@@ -247,11 +247,9 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 						boolean isSuccess = FileUtil.rename(MainActivity.this, mChoosedFile, fileName);
 						if (isSuccess) {
 							getFileList();
-							Toast.makeText(MainActivity.this, getString(R.string.toast_rename_file_success),
-									Toast.LENGTH_LONG).show();
+							toast(getString(R.string.toast_rename_file_success));
 						} else {
-							Toast.makeText(MainActivity.this, getString(R.string.toast_rename_file_fail),
-									Toast.LENGTH_LONG).show();
+							toast(getString(R.string.toast_rename_file_fail));
 						}
 					}
 				}
