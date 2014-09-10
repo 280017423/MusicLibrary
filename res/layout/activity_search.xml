@@ -33,12 +33,12 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/title_with_back_title_btn_left"
             android:gravity="left|center_vertical" >
 
@@ -47,15 +47,26 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="3dp"
-                android:background="#55000000"
+                android:paddingLeft="10dp"
+                android:background="@drawable/edt_search_shape"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:gravity="left|bottom"
+                android:gravity="left|center_vertical"
                 android:hint="@string/search"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
-        </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_search_clear"
+                android:layout_width="40dp"
+                android:layout_height="fill_parent"
+                android:layout_alignRight="@id/edt_search"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:src="@drawable/search_clear_bg"
+                android:onClick="onClick" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <GridView

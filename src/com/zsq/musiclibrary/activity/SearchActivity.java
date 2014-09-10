@@ -29,8 +29,7 @@ import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.OpenFileUtil;
 import com.zsq.musiclibrary.util.StringUtil;
 
-public class SearchActivity extends ActivityBase implements OnClickListener,
-		OnItemClickListener {
+public class SearchActivity extends ActivityBase implements OnClickListener, OnItemClickListener {
 
 	private static final int FILE_FOUND_CODE = 1;
 	private LinearLayout mLlBack;
@@ -43,27 +42,27 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case FILE_FOUND_CODE:
-				if (null != msg.obj) {
-					File file = (File) msg.obj;
-					if (null != file) {
-						mFileList.add(file);
-						Collections.sort(mFileList, new Comparator<File>() {
-							@Override
-							public int compare(File o1, File o2) {
-								if (o1.isDirectory() && o2.isFile())
-									return -1;
-								if (o1.isFile() && o2.isDirectory())
-									return 1;
-								return o1.getName().compareTo(o2.getName());
-							}
-						});
-						mFilAdapter.notifyDataSetChanged();
+				case FILE_FOUND_CODE:
+					if (null != msg.obj) {
+						File file = (File) msg.obj;
+						if (null != file) {
+							mFileList.add(file);
+							Collections.sort(mFileList, new Comparator<File>() {
+								@Override
+								public int compare(File o1, File o2) {
+									if (o1.isDirectory() && o2.isFile())
+										return -1;
+									if (o1.isFile() && o2.isDirectory())
+										return 1;
+									return o1.getName().compareTo(o2.getName());
+								}
+							});
+							mFilAdapter.notifyDataSetChanged();
+						}
 					}
-				}
-				break;
-			default:
-				break;
+					break;
+				default:
+					break;
 			}
 			super.handleMessage(msg);
 		}
@@ -89,13 +88,11 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 		mEdtSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence charSequence, int start,
-					int before, int count) {
+			public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence charSequence, int start,
-					int count, int after) {
+			public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
 			}
 
 			@Override
@@ -108,14 +105,12 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 
 						@Override
 						public void run() {
-							FileUtil.searchFile(kyeWord,
-									FileUtil.getResDir(SearchActivity.this),
+							FileUtil.searchFile(kyeWord, FileUtil.getResDir(SearchActivity.this),
 									new OnFileSearchListener() {
 
 										@Override
 										public void onFileFound(File file) {
-											Message msg = mHandler
-													.obtainMessage();
+											Message msg = mHandler.obtainMessage();
 											msg.what = FILE_FOUND_CODE;
 											msg.obj = file;
 											mHandler.sendMessage(msg);
@@ -141,11 +136,14 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_with_back_title_btn_left:
-			back();
-			break;
-		default:
-			break;
+			case R.id.title_with_back_title_btn_left:
+				back();
+				break;
+			case R.id.btn_search_clear:
+				mEdtSearch.setText("");
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -161,8 +159,7 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		File tempFile = (File) parent.getAdapter().getItem(position);
 		if (null == tempFile || !tempFile.exists()) {
 			return;
@@ -174,8 +171,7 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 		} else if (tempFile.isFile()) {
 			ArrayList<File> fileList = new ArrayList<File>();
 			ArrayList<File> imageFileList = new ArrayList<File>();
-			Intent intent = new Intent(SearchActivity.this,
-					MusicDetailActivity.class);
+			Intent intent = new Intent(SearchActivity.this, MusicDetailActivity.class);
 			File[] files = FileUtil.listFiles(this, tempFile.getParentFile());
 			if (files == null) {
 				return;
@@ -197,13 +193,10 @@ public class SearchActivity extends ActivityBase implements OnClickListener,
 			for (int i = 0; i < size; i++) {
 				File file = fileList.get(i);
 				if (!file.isDirectory()
-						&& OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil
-								.getFileEnding(file, SearchActivity.this)) {
+						&& OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil.getFileEnding(file, SearchActivity.this)) {
 					imageFileList.add(file);
-					if (tempFile.getAbsolutePath().equals(
-							file.getAbsolutePath())) {
-						intent.putExtra(ConstantSet.KEY_INTENT_IMG_POSITION,
-								imageFileList.size() - 1);
+					if (tempFile.getAbsolutePath().equals(file.getAbsolutePath())) {
+						intent.putExtra(ConstantSet.KEY_INTENT_IMG_POSITION, imageFileList.size() - 1);
 					}
 				}
 			}
