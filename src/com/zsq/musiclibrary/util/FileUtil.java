@@ -13,6 +13,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.zsq.musiclibrary.listener.IOperationProgressListener;
 import com.zsq.musiclibrary.listener.OnFileSearchListener;
 
 /**
@@ -24,6 +25,8 @@ import com.zsq.musiclibrary.listener.OnFileSearchListener;
  * 
  */
 public class FileUtil {
+	private static String ANDROID_SECURE = Environment.getExternalStorageDirectory() + File.separator
+			+ ".android_secure";
 	public static final int BUFSIZE = 256;
 	public static final int COUNT = 320;
 	private static final String TAG = "FileUtils";
@@ -42,16 +45,14 @@ public class FileUtil {
 	 * 
 	 */
 	public static File getResDir(Context context) {
-		String pathName = SharedPreferenceUtil.getStringValueByKey(context,
-				ConstantSet.CONFIG_FILE, ConstantSet.CUSTOM_DIR);
+		String pathName = SharedPreferenceUtil.getStringValueByKey(context, ConstantSet.CONFIG_FILE,
+				ConstantSet.CUSTOM_DIR);
 		if (StringUtil.isNullOrEmpty(pathName)) {
 			pathName = ConstantSet.DEFAULT_PATH;
 		}
 		File downloadFile = null;
-		if (android.os.Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {
-			downloadFile = new File(Environment.getExternalStorageDirectory(),
-					pathName);
+		if (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			downloadFile = new File(Environment.getExternalStorageDirectory(), pathName);
 		}
 		return downloadFile;
 	}
@@ -87,13 +88,13 @@ public class FileUtil {
 	 * @param filePath
 	 *            文件路径
 	 */
-	public static void delete(String filePath) {
+	public static void delete(String filePath, IOperationProgressListener l) {
 		if (filePath == null) {
 			return;
 		}
 		try {
 			File file = new File(filePath);
-			delete(file);
+			delete(file, l);
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());
 		}
@@ -105,14 +106,16 @@ public class FileUtil {
 	 * @param file
 	 *            文件
 	 */
-	public static void delete(File file) {
+	public static void delete(File file, IOperationProgressListener l) {
 		if (file == null || !file.exists()) {
 			return;
 		}
 		if (file.isDirectory()) {
-			deleteDirRecursive(file);
+			deleteDirRecursive(file, l);
 		} else {
-			file.delete();
+			if (file.delete()) {
+				l.onFileChanged(file);
+			}
 		}
 	}
 
@@ -122,7 +125,7 @@ public class FileUtil {
 	 * @param dir
 	 *            文件路径
 	 */
-	public static void deleteDirRecursive(File dir) {
+	public static void deleteDirRecursive(File dir, IOperationProgressListener l) {
 		if (dir == null || !dir.exists() || !dir.isDirectory()) {
 			return;
 		}
@@ -132,12 +135,16 @@ public class FileUtil {
 		}
 		for (File f : files) {
 			if (f.isFile()) {
-				f.delete();
+				if (f.delete()) {
+					l.onFileChanged(dir);
+				}
 			} else {
-				deleteDirRecursive(f);
+				deleteDirRecursive(f, l);
 			}
 		}
-		dir.delete();
+		if (dir.delete()) {
+			l.onFileChanged(dir);
+		}
 	}
 
 	/**
@@ -224,8 +231,7 @@ public class FileUtil {
 	 * @return 是否有SDCARD
 	 */
 	public static boolean isSDCardReady() {
-		return Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED);
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 	}
 
 	/**
@@ -281,24 +287,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * 获取文件扩展名
-	 * 
-	 * @param file
-	 * @return
-	 */
-	public static String getFileExtension(File file) {
-		if (null == file || !file.exists()) {
-			return "";
-		}
-		String fileName = file.getName();
-		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-			return fileName.substring(fileName.lastIndexOf(".") + 1);
-		} else {
-			return "";
-		}
-	}
-
-	/**
 	 * 通过关键字查找文件
 	 * 
 	 * @param keyword
@@ -308,8 +296,7 @@ public class FileUtil {
 	 * @param listener
 	 *            回调接口
 	 */
-	public static void searchFile(String keyword, File filepath,
-			OnFileSearchListener listener) {
+	public static void searchFile(String keyword, File filepath, OnFileSearchListener listener) {
 		File[] files = filepath.listFiles();
 		if (files.length > 0) {
 			for (File file : files) {
@@ -326,21 +313,58 @@ public class FileUtil {
 			}
 		}
 	}
-	
+
 	public static File[] listFiles(final Context context, File filepath) {
 		File[] files = filepath.listFiles(new FileFilter() {
 
 			@Override
 			public boolean accept(File file) {
 				boolean isAcceptable = false;
-				if (file.isDirectory()
-						|| OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil
-								.getFileEnding(file, context)) {
+				if (file.isDirectory() || OpenFileUtil.FILE_ENDING_IMAGE == OpenFileUtil.getFileEnding(file, context)) {
 					isAcceptable = true;
 				}
 				return isAcceptable;
 			}
 		});
 		return files;
+	}
+
+	public static boolean rename(Context context, File file, String newName) {
+		if (file == null || StringUtil.isNullOrEmpty(newName)) {
+			return false;
+		}
+		String path = file.getParentFile() + File.separator + newName + "." + getExtensionName(file.getName());
+		ImageUtil.scanMedia(context, path);
+		return file.renameTo(new File(path));
+	}
+
+	/*
+	 * Java文件操作 获取文件扩展名
+	 * 
+	 * Created on: 2011-8-2 Author: blueeagle
+	 */
+	public static String getExtensionName(String filename) {
+		if ((filename != null) && (filename.length() > 0)) {
+			int dot = filename.lastIndexOf('.');
+			if ((dot > -1) && (dot < (filename.length() - 1))) {
+				return filename.substring(dot + 1);
+			}
+		}
+		return filename;
+	}
+
+	/*
+	 * Java文件操作 获取不带扩展名的文件名
+	 * 
+	 * Created on: 2011-8-2 Author: blueeagle
+	 */
+	public static String getFileNameNoEx(String filename) {
+		if ((filename != null) && (filename.length() > 0)) {
+			int dot = filename.lastIndexOf('.');
+			if ((dot > -1) && (dot < (filename.length()))) {
+				return filename.substring(0, dot);
+			}
+		}
+		return filename;
 	}
 }

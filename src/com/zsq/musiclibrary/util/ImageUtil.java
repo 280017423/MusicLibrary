@@ -1,8 +1,13 @@
 package com.zsq.musiclibrary.util;
 
+import java.io.File;
+
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 
 /**
  * 
@@ -66,5 +71,22 @@ public class ImageUtil {
 		opt.inPurgeable = true;
 		opt.inInputShareable = true;
 		return BitmapFactory.decodeFile(url, opt);
+	}
+	
+	/**
+	 * 
+	 * @Name scanMedia
+	 * @Description 及时扫描拍照后的照片，在相册就能看到
+	 * @param context
+	 *            上下文对象
+	 * @param path
+	 *            照片的路径
+	 * 
+	 */
+	public static void scanMedia(Context context, String path) {
+		File file = new File(path);
+		Uri uri = Uri.fromFile(file);
+		Intent scanFileIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+		context.sendBroadcast(scanFileIntent);
 	}
 }

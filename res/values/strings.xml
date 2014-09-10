@@ -10,5 +10,16 @@
     <string name="text_version_code">当前版本&#160;v&#160;%s</string>
     <string name="unknow_version_name">未知版本</string>
     <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="rename">重命名</string>
+    <string name="delete">删除</string>
+    <string name="ensure">确定</string>
+    <string name="toast">提示</string>
+    <string name="toast_delete_file">确定要删除文件么？</string>
+    <string name="toast_delete_file_success">删除文件成功</string>
+    <string name="toast_delete_file_fail">删除文件失败</string>
+    <string name="toast_rename_file_success">重命名文件成功</string>
+    <string name="toast_rename_file_fail">重命名文件失败</string>
+    <string name="toast_rename_file">输入新的文件名</string>
 
 </resources>

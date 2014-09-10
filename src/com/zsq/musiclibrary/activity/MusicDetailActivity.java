@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.adapter.MusicDetailAdapter;
 import com.zsq.musiclibrary.util.ConstantSet;
+import com.zsq.musiclibrary.util.FileUtil;
 
 public class MusicDetailActivity extends ActivityBase {
 	private ArrayList<File> mImgsList;
@@ -47,7 +48,7 @@ public class MusicDetailActivity extends ActivityBase {
 		mViewPager.setAdapter(new MusicDetailAdapter(this, mImgsList));
 		mViewPager.setCurrentItem(mPosition, false);
 		mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
-		mTvMusicName.setText(mImgsList.get(mPosition).getName());
+		mTvMusicName.setText(FileUtil.getFileNameNoEx(mImgsList.get(mPosition).getName()));
 	}
 
 	private void setListener() {
@@ -57,7 +58,7 @@ public class MusicDetailActivity extends ActivityBase {
 			public void onPageSelected(int postion) {
 				mPosition = postion;
 				mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
-				mTvMusicName.setText(mImgsList.get(postion).getName());
+				mTvMusicName.setText(FileUtil.getFileNameNoEx(mImgsList.get(postion).getName()));
 			}
 
 			@Override
