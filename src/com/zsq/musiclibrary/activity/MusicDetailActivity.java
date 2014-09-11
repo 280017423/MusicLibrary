@@ -50,7 +50,7 @@ public class MusicDetailActivity extends ActivityBase {
 		mViewPager.setCurrentItem(mPosition, false);
 		mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
 		mTvMusicName.setText(FileUtil.getFileNameNoEx(mImgsList.get(mPosition).getName()));
-		mViewPager.setScrollDurationFactor(SCROLL_DURATION);
+//		mViewPager.setScrollDurationFactor(SCROLL_DURATION);
 	}
 
 	private void setListener() {
