@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.adapter.FolderAdapter;
 import com.zsq.musiclibrary.listener.IOperationProgressListener;
@@ -299,6 +300,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 				mTouchTime = currentTime;
 				return;
 			} else {
+				MobclickAgent.onKillProcess(this);
 				finish();
 			}
 		}

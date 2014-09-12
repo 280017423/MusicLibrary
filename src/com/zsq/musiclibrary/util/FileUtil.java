@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import android.content.Context;
 import android.os.Environment;
@@ -139,8 +140,7 @@ public class FileUtil {
 		long s = 0;
 		try {
 			if (f.exists()) {
-				FileInputStream fis = new FileInputStream(f);
-				s = fis.available();
+				s = new FileInputStream(f).available();
 			} else {
 				f.createNewFile();
 			}
@@ -278,6 +278,10 @@ public class FileUtil {
 	 */
 	public static void searchFile(String keyword, File file, OnFileSearchListener listener) {
 		File[] files = file.listFiles();
+		if (null == files) {
+			listener.onFileFound(file);
+			return;
+		}
 		if (files.length > 0) {
 			for (File subFile : files) {
 				if (subFile.isDirectory()) {
@@ -286,8 +290,8 @@ public class FileUtil {
 						searchFile(keyword, subFile, listener);
 					}
 				} else {
-					String fileName = subFile.getName().toLowerCase();
-					if (fileName.indexOf(keyword.toLowerCase()) > -1) {
+					String fileName = subFile.getName().toLowerCase(Locale.getDefault());
+					if (fileName.indexOf(keyword.toLowerCase(Locale.getDefault())) > -1) {
 						listener.onFileFound(subFile);
 					}
 				}

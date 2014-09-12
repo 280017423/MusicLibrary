@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -391,7 +390,6 @@ public class CustomDialog extends Dialog {
 			View layout = inflater.inflate(R.layout.dialog_commom_layout, null);
 			dialog.addContentView(layout, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 			TextView tvTitle = (TextView) layout.findViewById(R.id.tv_dialog_layout_title);
-			EditText edtView = (EditText) layout.findViewById(R.id.edt_dialog_editview);
 			TextView tvMessage = (TextView) layout.findViewById(R.id.tv_dialog_layout_msg);
 			TextView tvMessage_1 = (TextView) layout.findViewById(R.id.tv_dialog_layout_msg_1);
 			Button positiveButton = (Button) layout.findViewById(R.id.btn_dialog_layout_sure);

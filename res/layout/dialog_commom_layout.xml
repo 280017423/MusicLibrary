@@ -55,19 +55,6 @@
                 android:textColor="@color/gray_divider_line_color"
                 android:textSize="@dimen/size_3" />
 
-            <EditText
-                android:id="@+id/edt_dialog_editview"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/edt_teacher_msg_shape"
-                android:inputType="text"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:singleLine="true"
-                android:textColorHint="#9c9c9c"
-                android:visibility="gone" />
-
             <LinearLayout
                 android:id="@+id/ll_dialog_view"
                 android:layout_width="fill_parent"
