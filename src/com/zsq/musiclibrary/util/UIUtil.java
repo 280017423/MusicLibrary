@@ -2,6 +2,8 @@ package com.zsq.musiclibrary.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zsq.musiclibrary.listener.IActionListener;
+
 /**
  * UI的帮助类
  * 
@@ -32,6 +36,7 @@ import android.widget.TextView;
  */
 public class UIUtil {
 	private static final Object mSync = new Object();
+	private static final int DEFAUTL_COOLING_TIME = 3000;
 	private static final List<String> ACTION_LIST = new ArrayList<String>();
 
 	/**
@@ -146,6 +151,66 @@ public class UIUtil {
 		return bitmap;
 	}
 
+	/**
+	 * 限制执行频率的方法。如按钮需要在指定的3000ms时间后才能再次执行，使用方式如：<br>
+	 * 
+	 * @param id
+	 *            方法的标识，可以使用按钮控件的id或者其他唯一标识方法的字符串
+	 * @param actionListener
+	 *            方法的回调函数
+	 */
+	public static void limitReClick(final String id, IActionListener actionListener) {
+		if (StringUtil.isNullOrEmpty(id) || actionListener == null) {
+			throw new NullPointerException();
+		}
+
+		synchronized (mSync) {
+			if (ACTION_LIST.contains(id)) {
+				return;
+			} else {
+				ACTION_LIST.add(id);
+
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						removeAction(id);
+					}
+				}, DEFAUTL_COOLING_TIME);
+			}
+		}
+		actionListener.doAction();
+	}
+
+	/**
+	 * 限制执行频率的方法。如按钮需要在指定的时间后才能再次执行，使用方式如：<br>
+	 * 
+	 * @param id
+	 *            方法的标识，可以使用按钮控件的id或者其他唯一标识方法的字符串
+	 * @param delay
+	 *            延迟时间，以毫秒为单位
+	 * @param actionListener
+	 *            方法的回调函数
+	 */
+	public static void limitReClick(final String id, int delay, IActionListener actionListener) {
+		synchronized (mSync) {
+			if (ACTION_LIST.contains(id)) {
+				return;
+			} else {
+				ACTION_LIST.add(id);
+
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						removeAction(id);
+					}
+				}, delay);
+			}
+		}
+		actionListener.doAction();
+	}
+
 	public static void removeAction(String id) {
 		synchronized (mSync) {
 			ACTION_LIST.remove(id);
@@ -219,4 +284,5 @@ public class UIUtil {
 	public static int dpToPx(Resources res, int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
 	}
+
 }

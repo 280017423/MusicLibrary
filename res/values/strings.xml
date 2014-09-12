@@ -2,7 +2,6 @@
 
     <string name="app_name">万通资料</string>
     <string name="title_back_text">返回</string>
-    <string name="no_app_found">没有找到对应的应用程序</string>
     <string name="once_press_quit">再按一次退出</string>
     <string name="input_custom_dir">请输入定制目录</string>
     <string name="about">关于</string>
@@ -16,10 +15,43 @@
     <string name="ensure">确定</string>
     <string name="toast">提示</string>
     <string name="toast_delete_file">确定要删除文件么？</string>
-    <string name="toast_delete_file_success">删除文件成功</string>
-    <string name="toast_delete_file_fail">删除文件失败</string>
     <string name="toast_rename_file_success">重命名文件成功</string>
     <string name="toast_rename_file_fail">重命名文件失败</string>
     <string name="toast_rename_file">输入新的文件名</string>
+    <string name="umeng_example_home_btn_analytics">统计分析</string>
+    <string name="umeng_example_home_btn_fb">用户反馈</string>
+    <string name="umeng_example_home_btn_update">自动更新</string>
+    <string name="umeng_example_home_btn_plus">社交分享</string>
+    <string name="umeng_common_action_pause">暂停</string>
+    <string name="umeng_common_action_cancel">取消</string>
+    <string name="umeng_common_icon">icon</string>
+    
+    <string name="UMUpdateCheck">2.4.2.20140520</string>
+    <string name="UMBreak_Network">未联网</string>
+    <string name="UMUpdateTitle">发现新版本</string>
+    <string name="UMNewVersion">最新版本: </string>
+    <string name="UMUpdateContent">更新内容</string>
+    <string name="UMUpdateSize">仅需要下载:</string>
+    <string name="UMTargetSize">新版本大小:</string>
+    <string name="UMGprsCondition">（提示：非WIFI环境）</string>
+    <string name="UMUpdateNow">立即更新</string>
+    <string name="UMAppUpdate">应用更新</string>
+    <string name="UMNotNow">以后再说</string>
+    <string name="UMIgnore">忽略该版</string>
+    <string name="UMToast_IsUpdating">正在更新中....</string>
+    <string name="UMDialog_InstallAPK">最新版本已下载，是否安装？</string>
+    
+    <string name="umeng_common_action_info_exist">正在下载中.</string>
+	<string name="umeng_common_info_interrupt">下载出错啦，请检查网络后继续。</string>
+	<string name="umeng_common_action_continue">继续</string>
+	<string name="umeng_common_download_notification_prefix">正在下载: </string>
+	<string name="umeng_common_pause_notification_prefix">暂停: </string>
+	<string name="umeng_common_start_download_notification">正在下载应用</string>
+	<string name="umeng_common_start_patch_notification">正在更新安装包</string>
+    <string name="umeng_common_network_break_alert">请连接网络后再尝试！</string>
+	<string name="umeng_common_download_failed">下载失败</string>
+	<string name="umeng_common_download_finish">下载完成，请点击安装</string>
+	<string name="umeng_common_patch_finish">更新完成，请点击安装</string>
+	<string name="umeng_common_silent_download_finish">新版本已经准备好，请点击安装</string>
 
 </resources>

@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.adapter.MusicDetailAdapter;
+import com.zsq.musiclibrary.listener.IActionListener;
 import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.FileUtil;
+import com.zsq.musiclibrary.util.UIUtil;
 import com.zsq.musiclibrary.widget.AutoScrollViewPager;
 
 public class MusicDetailActivity extends ActivityBase {
-	private static final int SCROLL_DURATION = 3;
+	private static final int SCROLL_DURATION = 4;
+	private static final String TAG = "MusicDetailActivity";
 	private ArrayList<File> mImgsList;
 	private int mPosition;
 	private AutoScrollViewPager mViewPager;
@@ -50,7 +53,7 @@ public class MusicDetailActivity extends ActivityBase {
 		mViewPager.setCurrentItem(mPosition, false);
 		mTvCurrentTotal.setText((mPosition + 1) + "/" + mImgsList.size());
 		mTvMusicName.setText(FileUtil.getFileNameNoEx(mImgsList.get(mPosition).getName()));
-//		mViewPager.setScrollDurationFactor(SCROLL_DURATION);
+		mViewPager.setScrollDurationFactor(SCROLL_DURATION);
 	}
 
 	private void setListener() {
@@ -76,15 +79,26 @@ public class MusicDetailActivity extends ActivityBase {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyDown(final int keyCode, KeyEvent event) {
+		UIUtil.limitReClick(TAG, SCROLL_DURATION, new IActionListener() {
 
-		if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-			mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
-		} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-			mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
-		}
-
-		return super.onKeyDown(keyCode, event);
+			@Override
+			public void doAction() {
+				int currentPosition = mViewPager.getCurrentItem();
+				if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_LEFT
+						|| keyCode == KeyEvent.KEYCODE_BACK) {
+					if (currentPosition < mImgsList.size() - 1) {
+						mViewPager.setScrollDurationFactor(SCROLL_DURATION);
+						mViewPager.setCurrentItem(currentPosition + 1, true);
+					}
+				} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+					if (0 < currentPosition) {
+						mViewPager.setScrollDurationFactor(SCROLL_DURATION);
+						mViewPager.setCurrentItem(currentPosition - 1, true);
+					}
+				}
+			}
+		});
+		return true;
 	}
-
 }

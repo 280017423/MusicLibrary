@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UpdateConfig;
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.adapter.FolderAdapter;
 import com.zsq.musiclibrary.listener.IOperationProgressListener;
@@ -58,6 +60,11 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		// 友盟检查更新
+		UmengUpdateAgent.update(this);
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.setUpdateCheckConfig(true);
+		UpdateConfig.setDebug(false);
 		initVariables();
 		initView();
 		setListener();
