@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
@@ -34,6 +35,8 @@ public class MusicDetailActivity extends ActivityBase {
 		initVariables();
 		initViews();
 		setListener();
+		// 设置全屏
+		// UIUtil.systemUivisibility(this, Build.VERSION.RELEASE);
 	}
 
 	private void initVariables() {

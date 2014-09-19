@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +29,7 @@ import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.OpenFileUtil;
 import com.zsq.musiclibrary.util.StringUtil;
+import com.zsq.musiclibrary.util.UIUtil;
 import com.zsq.musiclibrary.widget.LoadingUpView;
 
 public class SearchActivity extends ActivityBase implements OnClickListener, OnItemClickListener {
