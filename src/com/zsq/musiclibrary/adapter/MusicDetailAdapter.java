@@ -1,12 +1,3 @@
-/**
- * @Title: DishEmptyAdapter.java
- * @Project DCB
- * @Package com.pdw.dcb.ui.adapter
- * @Description: 沽清列表
- * @author zeng.ww
- * @date 2012-12-10 下午04:37:29
- * @version V1.0
- */
 package com.zsq.musiclibrary.adapter;
 
 import java.io.File;
@@ -26,7 +17,7 @@ import com.zsq.musiclibrary.util.ImageUtil;
 import com.zsq.musiclibrary.util.StringUtil;
 
 /**
- * 新闻列表适配器
+ * 乐谱详细列表适配器
  * 
  * @author zou.sq
  * @since 2013-03-12 下午04:37:29
@@ -69,21 +60,18 @@ public class MusicDetailAdapter extends PagerAdapter {
 	@Override
 	public View instantiateItem(ViewGroup container, int position) {
 		final ImageView photoView = new ImageView(mContext);
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		photoView.setLayoutParams(params);
 		photoView.setScaleType(ScaleType.FIT_CENTER);
 		File imgFile = getItem(position);
-		if (null != imgFile
-				&& !StringUtil.isNullOrEmpty(imgFile.getAbsolutePath())) {
+		if (null != imgFile && !StringUtil.isNullOrEmpty(imgFile.getAbsolutePath())) {
 			String url = imgFile.getAbsolutePath();
 			Bitmap bitmap = ImageUtil.readBitMap(url);
 			photoView.setImageBitmap(bitmap);
 		} else {
 			photoView.setVisibility(View.GONE);
 		}
-		container.addView(photoView, LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
+		container.addView(photoView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 		return photoView;
 	}

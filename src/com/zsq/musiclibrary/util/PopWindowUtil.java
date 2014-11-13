@@ -37,7 +37,7 @@ public class PopWindowUtil {
 	}
 
 	private void initView() {
-		mPopupWindow = new PopupWindow(mMenuView, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		mPopupWindow = new PopupWindow(mMenuView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		mPopupWindow.setContentView(mMenuView);
 		mPopupWindow.setFocusable(true);
 		// 点击popupwindow窗口之外的区域popupwindow消失

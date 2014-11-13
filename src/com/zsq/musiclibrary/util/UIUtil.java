@@ -123,7 +123,7 @@ public class UIUtil {
 	public static ImageView getImageViewFromBitmap(Context ctx, Bitmap bitmap) {
 		ImageView imageView = new ImageView(ctx);
 		imageView.setLayoutParams(new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 		imageView.setAdjustViewBounds(true);
 		imageView.setImageBitmap(bitmap);
 		return imageView;
