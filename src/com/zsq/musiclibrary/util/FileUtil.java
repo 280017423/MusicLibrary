@@ -39,9 +39,6 @@ public class FileUtil {
 	 * @param context
 	 *            上下文对象
 	 * @return File 本地资源目录
-	 * @Author Administrator
-	 * @Date 2014年7月31日 下午4:07:39
-	 * 
 	 */
 	public static File getResDir(Context context) {
 		String pathName = SharedPreferenceUtil.getStringValueByKey(context, ConstantSet.CONFIG_FILE,

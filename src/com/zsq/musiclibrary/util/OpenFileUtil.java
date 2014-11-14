@@ -1,6 +1,7 @@
 package com.zsq.musiclibrary.util;
 
 import java.io.File;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +12,10 @@ import com.zsq.musiclibrary.R;
 /**
  * 
  * Description the class 打开文件帮助类
+ * 
  * @version 1.0
  * @author zou.sq
-*
+ * 
  */
 public class OpenFileUtil {
 
@@ -243,7 +245,7 @@ public class OpenFileUtil {
 			return false;
 		}
 		for (String aEnd : fileEndings) {
-			if (file.getName().endsWith(aEnd)) {
+			if (file.getName().toLowerCase(Locale.getDefault()).endsWith(aEnd)) {
 				return true;
 			}
 		}

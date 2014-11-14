@@ -11,7 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -41,6 +41,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	private static final long WAIT_TIME = 2000;
 	private static final int SEARCH_REQUEST_CODE = 1;
 	private static final int ABOUT_REQUEST_CODE = 2;
+	private static final int TAKE_PHONE_REQUEST_CODE = 3;
 	private static final int DIALOG_CATION_DELETE = 0;
 	private static final int DIALOG_CATION_RENAME = 1;
 	private GridView mGvRootFolder;
@@ -95,7 +96,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	}
 
 	private void initActionSheet() {
-		mActionSheetView = LayoutInflater.from(this).inflate(R.layout.view_action_sheet, null);
+		mActionSheetView = View.inflate(this, R.layout.view_action_sheet, null);
 		mPopWindowUtil = new PopWindowUtil(mActionSheetView, mLlSearch, null);
 		mActionSheetView.findViewById(R.id.rl_pop_view).setOnClickListener(this);
 		mActionSheetView.findViewById(R.id.tv_cation_rename).setOnClickListener(this);
@@ -190,6 +191,10 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 			case R.id.rl_pop_view:
 				mPopWindowUtil.dissmiss();
 				break;
+			case R.id.imb_take_photo:
+				Intent intent2 = new Intent(MainActivity.this, PhotoActivity.class);
+				startActivityForResult(intent2, TAKE_PHONE_REQUEST_CODE);
+				break;
 			default:
 				break;
 		}
@@ -275,6 +280,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 		}
 		switch (requestCode) {
 			case ABOUT_REQUEST_CODE:
+			case TAKE_PHONE_REQUEST_CODE:
 				mResDir = FileUtil.getResDir(this);
 				mCurrentFile = mResDir;
 				getFileList();

@@ -24,4 +24,18 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
 
+    <ImageButton
+        android:id="@+id/imb_take_photo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_main_selector"
+        android:contentDescription="@null"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:src="@drawable/ic_camera" />
+
 </RelativeLayout>

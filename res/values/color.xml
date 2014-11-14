@@ -12,7 +12,6 @@
     <color name="white_80_alpha">#ccffffff</color>
     <color name="divider_line_color">#dfdfdf</color>
     <color name="accent_1">#ff29549f</color>
-    
     <color name="body_text_1">#ff000000</color>
     <color name="body_text_2">#99000000</color>
     <color name="body_text_disabled">#66000000</color>
@@ -25,5 +24,7 @@
     <color name="block_column_1">#ff0fabff</color>
     <color name="block_column_2">#ffdf1831</color>
     <color name="block_column_3">#ff009939</color>
+    <color name="gradient_start_gray">#4c4c4c</color>
+    <color name="gradient_end_gray">#333333</color>
 
 </resources>

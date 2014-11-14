@@ -3,10 +3,6 @@ package com.zsq.musiclibrary.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -172,7 +168,7 @@ public class SharedPreferenceUtil {
 		if (keyPrefixType != null && keyPrefixType.length() > 0) {
 			prefix = keyPrefixType + separator;
 		}
-		Class clazz = obj.getClass();
+		Class<?> clazz = obj.getClass();
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(fileName, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 		// 获取实体类的所有属性，返回Field数组
@@ -223,7 +219,7 @@ public class SharedPreferenceUtil {
 	 * @return Object
 	 * @throws
 	 */
-	public static Object getObject(Context mContext, String fileName, Class clazz) {
+	public static Object getObject(Context mContext, String fileName, Class<?> clazz) {
 		return getObject(mContext, fileName, clazz, null);
 	}
 
@@ -237,7 +233,7 @@ public class SharedPreferenceUtil {
 	 * @return Object
 	 * @throws
 	 */
-	public static Object getObject(Context mContext, String fileName, Class clazz, String keyPrefixType) {
+	public static Object getObject(Context mContext, String fileName, Class<?> clazz, String keyPrefixType) {
 		Object object = null;
 		try {
 			// 得到前缀字符串；
@@ -310,29 +306,4 @@ public class SharedPreferenceUtil {
 		editor.commit();
 	}
 
-	/**
-	 * 清除当前Model的本地存储以某些关键字为前缀的缓存；如同时删除会员卡信息UserReq.clearMemberCardInfo()
-	 * 
-	 * @Method: removeObject
-	 * @param mContext
-	 * @param fileName
-	 * @return void
-	 * @throws
-	 */
-	public static void clearAllByPrefix(Context mContext, String fileName, String prefix) {
-		SharedPreferences sharedPreferences = mContext.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-		Editor editor = sharedPreferences.edit();
-
-		Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
-
-		Set<Entry<String, String>> set = map.entrySet();
-		for (Iterator<Map.Entry<String, String>> it = set.iterator(); it.hasNext();) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
-			// 如果是以指定的prefix为前缀，则删除；
-			if (entry.getKey().startsWith(prefix)) {
-				editor.remove(entry.getKey());
-			}
-		}
-		editor.commit();
-	}
 }

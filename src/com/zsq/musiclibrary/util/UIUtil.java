@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -286,31 +285,33 @@ public class UIUtil {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
 	}
 
-	public static void systemUiVisibility(Activity paramActivity, int paramInt) {
-		switch (paramInt) {
-			default:
-				return;
-			case 900:
-				paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
-				return;
-			case 800:
-				paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
-				return;
-			case 768:
-		}
-		paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
-	}
-
-	public static void systemUivisibility(Activity paramActivity, String paramString) {
-		if (paramString.equals("4.1.1")) {
-			paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
-			return;
-		}
-		if (paramString.equals("4.04")) {
-			paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
-			return;
-		}
-		paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
-	}
+	// public static void systemUiVisibility(Activity paramActivity, int
+	// paramInt) {
+	// switch (paramInt) {
+	// default:
+	// return;
+	// case 900:
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
+	// return;
+	// case 800:
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
+	// return;
+	// case 768:
+	// }
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
+	// }
+	//
+	// public static void systemUivisibility(Activity paramActivity, String
+	// paramString) {
+	// if (paramString.equals("4.1.1")) {
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.GONE);
+	// return;
+	// }
+	// if (paramString.equals("4.04")) {
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
+	// return;
+	// }
+	// paramActivity.getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
+	// }
 
 }
