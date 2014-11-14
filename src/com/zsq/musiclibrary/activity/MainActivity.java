@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,8 +41,8 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	private static final int SEARCH_REQUEST_CODE = 1;
 	private static final int ABOUT_REQUEST_CODE = 2;
 	private static final int TAKE_PHONE_REQUEST_CODE = 3;
-	private static final int DIALOG_CATION_DELETE = 0;
-	private static final int DIALOG_CATION_RENAME = 1;
+	private static final int DIALOG_ACTION_DELETE = 0;
+	private static final int DIALOG_ACTION_RENAME = 1;
 	private GridView mGvRootFolder;
 	private ArrayList<File> mFileList;
 	private FolderAdapter mFilAdapter;
@@ -182,17 +181,17 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 				break;
 			case R.id.tv_cation_rename:
 				mPopWindowUtil.dissmiss();
-				showDialog(DIALOG_CATION_RENAME);
+				showDialog(DIALOG_ACTION_RENAME);
 				break;
 			case R.id.tv_cation_delete:
 				mPopWindowUtil.dissmiss();
-				showDialog(DIALOG_CATION_DELETE);
+				showDialog(DIALOG_ACTION_DELETE);
 				break;
 			case R.id.rl_pop_view:
 				mPopWindowUtil.dissmiss();
 				break;
-			case R.id.imb_take_photo:
-				Intent intent2 = new Intent(MainActivity.this, PhotoActivity.class);
+			case R.id.tv_take_photo:
+				Intent intent2 = new Intent(MainActivity.this, CameraActivity.class);
 				startActivityForResult(intent2, TAKE_PHONE_REQUEST_CODE);
 				break;
 			default:
@@ -203,11 +202,11 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-			case DIALOG_CATION_DELETE:
+			case DIALOG_ACTION_DELETE:
 				return createDialogBuilder(MainActivity.this, getString(R.string.toast),
 						getString(R.string.toast_delete_file), getString(R.string.cancel), getString(R.string.ensure))
 						.create(id);
-			case DIALOG_CATION_RENAME:
+			case DIALOG_ACTION_RENAME:
 				Builder builder = createDialogBuilder(MainActivity.this, getString(R.string.toast), "",
 						getString(R.string.cancel), getString(R.string.ensure));
 				mEdtFileName = new EditText(this);
@@ -235,7 +234,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	@Override
 	public void onNegativeBtnClick(int id, DialogInterface dialog, int which) {
 		switch (id) {
-			case DIALOG_CATION_DELETE:
+			case DIALOG_ACTION_DELETE:
 				if (null != mChoosedFile) {
 					FileUtil.delete(mChoosedFile, new IOperationProgressListener() {
 
@@ -253,7 +252,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 					});
 				}
 				break;
-			case DIALOG_CATION_RENAME:
+			case DIALOG_ACTION_RENAME:
 				if (null != mEdtFileName && !StringUtil.isNullOrEmpty(mEdtFileName.getText().toString().trim())) {
 					String fileName = mEdtFileName.getText().toString().trim();
 					if (null != mChoosedFile) {

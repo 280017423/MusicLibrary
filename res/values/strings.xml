@@ -18,6 +18,7 @@
     <string name="toast_rename_file_success">重命名文件成功</string>
     <string name="toast_rename_file_fail">重命名文件失败</string>
     <string name="toast_rename_file">输入新的文件名</string>
+    <string name="toast_music_name">输入乐谱名</string>
     <string name="umeng_example_home_btn_analytics">统计分析</string>
     <string name="umeng_example_home_btn_fb">用户反馈</string>
     <string name="umeng_example_home_btn_update">自动更新</string>

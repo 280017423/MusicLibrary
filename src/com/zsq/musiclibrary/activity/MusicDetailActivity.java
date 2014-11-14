@@ -18,7 +18,7 @@ import com.zsq.musiclibrary.util.UIUtil;
 import com.zsq.musiclibrary.widget.AutoScrollViewPager;
 
 public class MusicDetailActivity extends ActivityBase {
-	private static final int SCROLL_DURATION = 4;
+	private static final int SCROLL_DURATION = 1;
 	private static final int DELAY_TIME = 1000;
 	private static final String TAG = "MusicDetailActivity";
 	private ArrayList<File> mImgsList;

@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <SurfaceView
+        android:id="@+id/surface_camera"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <ImageView
+        android:id="@+id/autofoucs"
+        android:layout_width="156dp"
+        android:layout_height="156dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/btn_take_photo"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_main_selector"
+        android:clickable="true"
+        android:drawablePadding="-5dp"
+        android:drawableTop="@drawable/ic_camera"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:paddingBottom="5dp"
+        android:text="拍摄乐谱"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_above="@id/btn_take_photo"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_main_selector"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:padding="5dip"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_above="@id/btn_save"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_main_selector"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:padding="5dip"
+        android:text="@string/title_back_text"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/iv_thumb_photo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:visibility="gone"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/compose" />
+
+</RelativeLayout>
