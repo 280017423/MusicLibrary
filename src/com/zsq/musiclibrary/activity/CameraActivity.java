@@ -35,6 +35,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zsq.musiclibrary.R;
@@ -59,6 +60,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	private MediaPlayer mMediaPlayer;
 	private EditText mEdtFileName;
 	private ImageView mIvThumb;
+	private TextView mBtnTakePhone;
 	private BadgeView mBadgeView;
 	private PictureCallback mPictureCallBack = new Camera.PictureCallback() {
 		@Override
@@ -109,6 +111,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	}
 
 	private void initViews() {
+		mBtnTakePhone = (TextView)findViewById(R.id.btn_take_photo);
 		mSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(this);
@@ -217,9 +220,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					bitmap.recycle();
 					newBitMap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
 					mPhotosList.add(file);
-					Message msg = mHandler.obtainMessage();
-					msg.what = ACTION_SAVE_PHOTO_SUCCESS;
-					mHandler.sendMessage(msg);
+					newBitMap.recycle();
 					initCamera();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -233,6 +234,17 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 			}
 			return null;
 		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			mBtnTakePhone.setEnabled(true);
+			Message msg = mHandler.obtainMessage();
+			msg.what = ACTION_SAVE_PHOTO_SUCCESS;
+			mHandler.sendMessage(msg);
+			super.onPostExecute(result);
+		}
+		
+		
 	}
 
 	private void shootSound() {
@@ -262,6 +274,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 			case R.id.btn_take_photo:
 				if (null != mCamera) {
 					shootSound();
+					mBtnTakePhone.setEnabled(false);
 					mCamera.takePicture(null, null, mPictureCallBack);
 				}
 				break;

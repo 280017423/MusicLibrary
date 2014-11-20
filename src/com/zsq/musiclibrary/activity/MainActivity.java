@@ -50,7 +50,6 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	private File mCurrentFile;
 	private File mChoosedFile;
 	private LinearLayout mLlBack;
-	private LinearLayout mLlSearch;
 	private long mTouchTime;
 	private View mActionSheetView;
 	private PopWindowUtil mPopWindowUtil;
@@ -84,19 +83,15 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 		TextView titleTextView = (TextView) findViewById(R.id.title_with_back_title_btn_mid);
 		titleTextView.setText(R.string.app_name);
 		mLlBack = (LinearLayout) findViewById(R.id.title_with_back_title_btn_left);
-		mLlSearch = (LinearLayout) findViewById(R.id.title_with_back_title_btn_right);
 		TextView mTvBack = (TextView) findViewById(R.id.tv_title_with_back_left);
 		mTvBack.setText(R.string.title_back_text);
 		mTvBack.setBackgroundResource(R.drawable.btn_back_bg);
-		TextView tvRight = (TextView) findViewById(R.id.tv_title_with_right);
-		tvRight.setBackgroundResource(R.drawable.tongyong_button_bg);
-		tvRight.setText(R.string.search);
 		initActionSheet();
 	}
 
 	private void initActionSheet() {
 		mActionSheetView = View.inflate(this, R.layout.view_action_sheet, null);
-		mPopWindowUtil = new PopWindowUtil(mActionSheetView, mLlSearch, null);
+		mPopWindowUtil = new PopWindowUtil(mActionSheetView, mLlBack, null);
 		mActionSheetView.findViewById(R.id.rl_pop_view).setOnClickListener(this);
 		mActionSheetView.findViewById(R.id.tv_cation_rename).setOnClickListener(this);
 		mActionSheetView.findViewById(R.id.tv_cation_delete).setOnClickListener(this);
@@ -106,7 +101,6 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 		mGvRootFolder.setOnItemClickListener(this);
 		mGvRootFolder.setOnItemLongClickListener(this);
 		mLlBack.setOnClickListener(this);
-		mLlSearch.setOnClickListener(this);
 	}
 
 	private void getFileList() {
@@ -175,7 +169,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 					getFileList();
 				}
 				break;
-			case R.id.title_with_back_title_btn_right:
+			case R.id.btn_search:
 				Intent intent = new Intent(MainActivity.this, SearchActivity.class);
 				startActivityForResult(intent, SEARCH_REQUEST_CODE);
 				break;
