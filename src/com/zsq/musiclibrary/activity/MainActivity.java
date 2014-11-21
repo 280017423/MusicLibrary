@@ -72,13 +72,13 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 
 	private void initVariables() {
 		mFileList = new ArrayList<File>();
-		mFilAdapter = new FolderAdapter(this, mFileList);
 		mResDir = FileUtil.getResDir(this);
 		mCurrentFile = mResDir;
 	}
 
 	private void initView() {
 		mGvRootFolder = (GridView) findViewById(R.id.gv_root_folder);
+		mFilAdapter = new FolderAdapter(this, mFileList, mGvRootFolder);
 		mGvRootFolder.setAdapter(mFilAdapter);
 		TextView titleTextView = (TextView) findViewById(R.id.title_with_back_title_btn_mid);
 		titleTextView.setText(R.string.app_name);
@@ -187,6 +187,8 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 			case R.id.tv_take_photo:
 				Intent intent2 = new Intent(MainActivity.this, CameraActivity.class);
 				startActivityForResult(intent2, TAKE_PHONE_REQUEST_CODE);
+			case R.id.btn_about:
+				gotoAbout();
 				break;
 			default:
 				break;

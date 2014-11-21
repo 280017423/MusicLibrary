@@ -13,16 +13,19 @@ import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zsq.musiclibrary.R;
+import com.zsq.musiclibrary.listener.ImageLoadListener;
+import com.zsq.musiclibrary.util.AsyncImageLoader;
 import com.zsq.musiclibrary.util.UIUtil;
 
 /**
@@ -37,7 +40,9 @@ public class FolderAdapter extends BaseAdapter {
 	private static final int NUM_COLUMNS = 4;
 	private List<File> mFilesList;
 	private Activity mContext;
-	private int mWidth;
+	private int mImgSize;
+	private GridView mGridView;
+	private AsyncImageLoader mImageLoader;
 
 	/**
 	 * 实例化对象
@@ -47,12 +52,15 @@ public class FolderAdapter extends BaseAdapter {
 	 * @param dataList
 	 *            数据列表
 	 */
-	public FolderAdapter(Activity context, List<File> dataList) {
+	public FolderAdapter(Activity context, List<File> dataList, GridView gridView) {
 		this.mContext = context;
 		this.mFilesList = dataList;
+		mGridView = gridView;
+		mImageLoader = new AsyncImageLoader();
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
-		mWidth = metric.widthPixels;
+		int width = metric.widthPixels;
+		mImgSize = (width - UIUtil.dip2px(mContext, SPACE_VALUE) * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 	}
 
 	@Override
@@ -80,36 +88,35 @@ public class FolderAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		viewHode view = new viewHode();
 		if (convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(
-					R.layout.view_folder_item, null);
-			view.mName = (TextView) convertView
-					.findViewById(R.id.tv_folder_name);
-			view.mIcon = (ImageView) convertView
-					.findViewById(R.id.iv_folder_img);
+			convertView = View.inflate(mContext, R.layout.view_folder_item, null);
+			view.mName = (TextView) convertView.findViewById(R.id.tv_folder_name);
+			view.mIcon = (ImageView) convertView.findViewById(R.id.iv_folder_img);
 			convertView.setTag(view);
 		} else {
 			view = (viewHode) convertView.getTag();
 		}
 
 		LayoutParams layoutParams = view.mIcon.getLayoutParams();
-		layoutParams.width = (mWidth - UIUtil.dip2px(mContext, SPACE_VALUE)
-				* (NUM_COLUMNS + 1))
-				/ NUM_COLUMNS;
-		layoutParams.height = layoutParams.width;
+		layoutParams.width = mImgSize;
+		layoutParams.height = mImgSize;
 		view.mIcon.setLayoutParams(layoutParams);
 
 		File file = mFilesList.get(position);
+		view.mIcon.setTag(file.getAbsolutePath());
 		if (null != file) {
 			if (file.isDirectory()) {
 				view.mIcon.setImageResource(R.drawable.format_folder);
 			} else {
-				// Bitmap bitmapThumbnail = ImageUtil.getImageThumbnail(file
-				// .getAbsolutePath());
-				// if (null != bitmapThumbnail) {
-				// view.mIcon.setImageBitmap(bitmapThumbnail);
-				// } else {
-				view.mIcon.setImageResource(R.drawable.compose);
-				// }
+				mImageLoader.loadDrawable(file.getAbsolutePath(), mImgSize, new ImageLoadListener() {
+
+					@Override
+					public void imageLoaded(Bitmap bitmap, String imageUrl) {
+						ImageView imageViewByTag = (ImageView) mGridView.findViewWithTag(imageUrl);
+						if (imageViewByTag != null) {
+							imageViewByTag.setImageBitmap(bitmap);
+						}
+					}
+				});
 			}
 			view.mName.setText(file.getName());
 		}

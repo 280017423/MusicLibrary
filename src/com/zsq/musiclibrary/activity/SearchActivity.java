@@ -86,7 +86,6 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 
 	private void initVariables() {
 		mFileList = new ArrayList<File>();
-		mFilAdapter = new FolderAdapter(this, mFileList);
 		mLoadingUpView = new LoadingUpView(this, true);
 	}
 
@@ -118,6 +117,7 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 
 	private void initView() {
 		mGvRootFolder = (GridView) findViewById(R.id.gv_search_folder);
+		mFilAdapter = new FolderAdapter(this, mFileList, mGvRootFolder);
 		mGvRootFolder.setAdapter(mFilAdapter);
 		mLlBack = (LinearLayout) findViewById(R.id.title_with_back_title_btn_left);
 		mLlSearch = (LinearLayout) findViewById(R.id.title_with_back_title_btn_right);

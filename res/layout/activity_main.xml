@@ -41,7 +41,7 @@
         android:paddingBottom="5dp"
         android:text="拍摄乐谱"
         android:textColor="@color/white" />
-    
+
     <Button
         android:id="@+id/btn_search"
         android:layout_width="100dp"
@@ -55,6 +55,22 @@
         android:onClick="onClick"
         android:padding="5dip"
         android:text="@string/search"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_about"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_above="@id/btn_search"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_main_selector"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:padding="5dip"
+        android:text="@string/about"
         android:textColor="@color/white"
         android:textSize="16sp" />
 

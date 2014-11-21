@@ -38,6 +38,7 @@ public class MusicDetailActivity extends ActivityBase {
 		// UIUtil.systemUivisibility(this, Build.VERSION.RELEASE);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initVariables() {
 		Intent intent = getIntent();
 		if (null != intent) {
