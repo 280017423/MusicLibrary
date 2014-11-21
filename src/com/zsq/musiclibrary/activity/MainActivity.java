@@ -187,6 +187,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 			case R.id.tv_take_photo:
 				Intent intent2 = new Intent(MainActivity.this, CameraActivity.class);
 				startActivityForResult(intent2, TAKE_PHONE_REQUEST_CODE);
+				break;
 			case R.id.btn_about:
 				gotoAbout();
 				break;

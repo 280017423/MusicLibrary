@@ -42,6 +42,7 @@ import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.ImageUtil;
 import com.zsq.musiclibrary.util.StringUtil;
+import com.zsq.musiclibrary.util.UIUtil;
 import com.zsq.musiclibrary.widget.BadgeView;
 import com.zsq.musiclibrary.widget.CustomDialog.Builder;
 
@@ -52,6 +53,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	public static final int IMG_PICTURE_WIDTH = 768;
 	public static final int IMG_PICTURE_HEIGHT = 1240;
 	public static final int ANIMATION_DURATION = 500;
+	public static final int THUMBNAIL_SIZE = 80;
 	private ArrayList<File> mPhotosList;
 	private SurfaceView mSurfaceView;
 	private SurfaceHolder mSurfaceHolder;
@@ -75,6 +77,10 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 				case ACTION_SAVE_PHOTO_SUCCESS:
+					if (null != msg.obj) {
+						Bitmap thumbnail = (Bitmap) msg.obj;
+						mIvThumb.setImageBitmap(thumbnail);
+					}
 					if (View.VISIBLE != mIvThumb.getVisibility()) {
 						startAnim();
 					}
@@ -111,7 +117,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	}
 
 	private void initViews() {
-		mBtnTakePhone = (TextView)findViewById(R.id.btn_take_photo);
+		mBtnTakePhone = (TextView) findViewById(R.id.btn_take_photo);
 		mSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(this);
@@ -200,12 +206,13 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		return true;
 	}
 
-	class SavePictureTask extends AsyncTask<byte[], String, String> {
+	class SavePictureTask extends AsyncTask<byte[], String, Bitmap> {
 
 		@Override
-		protected String doInBackground(byte[]... params) {
+		protected Bitmap doInBackground(byte[]... params) {
+			Bitmap thumbnail = null;
+			FileOutputStream fos = null;
 			if (mCamera != null) {
-				FileOutputStream fos = null;
 				try {
 					File file = ImageUtil.getOutputMediaFile(CameraActivity.this);
 					fos = new FileOutputStream(file);
@@ -220,6 +227,9 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					bitmap.recycle();
 					newBitMap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
 					mPhotosList.add(file);
+					thumbnail = ImageUtil.getImageThumbnail(file.getAbsolutePath(),
+							UIUtil.dpToPx(getResources(), THUMBNAIL_SIZE),
+							UIUtil.dpToPx(getResources(), THUMBNAIL_SIZE));
 					newBitMap.recycle();
 					initCamera();
 				} catch (IOException e) {
@@ -232,19 +242,19 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					}
 				}
 			}
-			return null;
+			return thumbnail;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Bitmap thumbnail) {
 			mBtnTakePhone.setEnabled(true);
 			Message msg = mHandler.obtainMessage();
 			msg.what = ACTION_SAVE_PHOTO_SUCCESS;
+			msg.obj = thumbnail;
 			mHandler.sendMessage(msg);
-			super.onPostExecute(result);
+			super.onPostExecute(thumbnail);
 		}
-		
-		
+
 	}
 
 	private void shootSound() {
