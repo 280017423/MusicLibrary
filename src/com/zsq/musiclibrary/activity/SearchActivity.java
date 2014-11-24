@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -174,8 +175,8 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 						if (file.isFile()) {
 							sendHandler(FILE_FOUND_CODE, file);
 						} else {
-							String fileName = file.getName().toLowerCase();
-							if (fileName.indexOf(kyeWord.toLowerCase()) > -1) {
+							String fileName = file.getName().toLowerCase(Locale.getDefault());
+							if (fileName.indexOf(kyeWord.toLowerCase(Locale.getDefault())) > -1) {
 								sendHandler(FILE_FOUND_CODE, file);
 							}
 						}
@@ -252,7 +253,7 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 			}
 			intent.putExtra(ConstantSet.KEY_INTENT_IMGS_LIST, imageFileList);
 			startActivity(intent);
-			finish();
 		}
+		finish();
 	}
 }

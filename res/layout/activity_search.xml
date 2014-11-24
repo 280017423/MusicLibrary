@@ -32,73 +32,79 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
+    </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/title_with_back_title_btn_right"
+    <LinearLayout
+        android:id="@+id/title_with_back_title_btn_right"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/layout_title"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:gravity="center_vertical|right"
+        android:paddingBottom="5dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:visibility="visible" >
+
+        <TextView
+            android:id="@+id/tv_title_with_right"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:gravity="center_vertical|right"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:visibility="visible" >
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_title_with_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:duplicateParentState="true"
-                android:focusable="false"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/layout_title"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/title_with_back_title_btn_right"
+        android:gravity="left|center_vertical" >
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/edt_search"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_margin="5dp"
+            android:background="@drawable/edt_search_shape"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="left|center_vertical"
+            android:hint="@string/search"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/btn_search_clear"
+            android:layout_width="40dp"
+            android:layout_height="fill_parent"
+            android:layout_alignRight="@id/edt_search"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/title_with_back_title_btn_right"
-            android:layout_toRightOf="@id/title_with_back_title_btn_left"
-            android:gravity="left|center_vertical" >
-
-            <EditText
-                android:id="@+id/edt_search"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="5dp"
-                android:background="@drawable/edt_search_shape"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/search"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <ImageButton
-                android:id="@+id/btn_search_clear"
-                android:layout_width="40dp"
-                android:layout_height="fill_parent"
-                android:layout_alignRight="@id/edt_search"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:onClick="onClick"
-                android:src="@drawable/search_clear_bg" />
-        </RelativeLayout>
+            android:background="@null"
+            android:contentDescription="@null"
+            android:onClick="onClick"
+            android:src="@drawable/search_clear_bg" />
     </RelativeLayout>
 
     <GridView
         android:id="@+id/gv_search_folder"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout_title"
+        android:layout_below="@id/rl_search"
+        android:layout_marginTop="20dp"
         android:cacheColorHint="@android:color/transparent"
         android:clickable="false"
         android:fadingEdge="none"
