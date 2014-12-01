@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -18,6 +20,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -283,6 +286,25 @@ public class UIUtil {
 
 	public static int dpToPx(Resources res, int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+	}
+
+	public static int getWidthPixels(Activity context) {
+		DisplayMetrics metric = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+		return metric.widthPixels;
+	}
+
+	public static int getHeightPixels(Activity context) {
+		DisplayMetrics metric = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+		return metric.heightPixels;
+	}
+
+	public static boolean isLandscape(Context context) {
+
+		Configuration mConfiguration = context.getResources().getConfiguration(); // 获取设置的配置信息
+		int ori = mConfiguration.orientation; // 获取屏幕方向
+		return ori == Configuration.ORIENTATION_LANDSCAPE;
 	}
 
 	// public static void systemUiVisibility(Activity paramActivity, int

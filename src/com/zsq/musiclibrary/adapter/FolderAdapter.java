@@ -107,6 +107,7 @@ public class FolderAdapter extends BaseAdapter {
 			if (file.isDirectory()) {
 				view.mIcon.setImageResource(R.drawable.format_folder);
 			} else {
+				view.mIcon.setImageResource(R.drawable.format_picture);
 				mImageLoader.loadDrawable(file.getAbsolutePath(), mImgSize, new ImageLoadListener() {
 
 					@Override

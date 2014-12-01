@@ -50,8 +50,8 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 
 	public static final int DIALOG_ACTION_SAVE = 1;
 	public static final int ACTION_SAVE_PHOTO_SUCCESS = 2;
-	public static final int IMG_PICTURE_WIDTH = 768;
-	public static final int IMG_PICTURE_HEIGHT = 1240;
+	public static int IMG_PICTURE_WIDTH;
+	public static int IMG_PICTURE_HEIGHT;
 	public static final int ANIMATION_DURATION = 500;
 	public static final int THUMBNAIL_SIZE = 80;
 	private ArrayList<File> mPhotosList;
@@ -113,6 +113,14 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		setContentView(R.layout.activity_camera);
 		mCamera = Camera.open();
 		mPhotosList = new ArrayList<File>();
+		if (UIUtil.isLandscape(this)) {
+			IMG_PICTURE_HEIGHT = UIUtil.getWidthPixels(this);
+			IMG_PICTURE_WIDTH = UIUtil.getHeightPixels(this);
+		} else {
+			IMG_PICTURE_WIDTH = UIUtil.getWidthPixels(this);
+			IMG_PICTURE_HEIGHT = UIUtil.getHeightPixels(this);
+		}
+
 		initViews();
 	}
 
@@ -161,7 +169,9 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		Camera.Parameters parameters = mCamera.getParameters();
 		mCamera.setParameters(parameters);
 		mCamera.startPreview();
-		mCamera.setDisplayOrientation(90);
+		if (!UIUtil.isLandscape(this)) {
+			mCamera.setDisplayOrientation(90);
+		}
 		mHasStartPreview = true;
 	}
 
@@ -222,10 +232,13 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					Matrix m = new Matrix();
 					int width = bitmap.getWidth();
 					int height = bitmap.getHeight();
-					m.setRotate(90); // 旋转90度
+					if (!UIUtil.isLandscape(CameraActivity.this)) {
+						m.setRotate(90); // 旋转90度
+					}
+
 					Bitmap newBitMap = Bitmap.createBitmap(bitmap, 0, 0, width, height, m, true);// 从新生成图片
 					bitmap.recycle();
-					newBitMap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+					newBitMap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 					mPhotosList.add(file);
 					thumbnail = ImageUtil.getImageThumbnail(file.getAbsolutePath(),
 							UIUtil.dpToPx(getResources(), THUMBNAIL_SIZE),
