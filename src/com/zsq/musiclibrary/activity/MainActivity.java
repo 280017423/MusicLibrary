@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,9 +21,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateConfig;
 import com.zsq.musiclibrary.R;
@@ -37,7 +36,7 @@ import com.zsq.musiclibrary.util.UIUtil;
 import com.zsq.musiclibrary.widget.CustomDialog.Builder;
 
 public class MainActivity extends ActivityBase implements OnClickListener, OnItemClickListener, OnItemLongClickListener {
-	private static final long WAIT_TIME = 2000;
+
 	private static final int SEARCH_REQUEST_CODE = 1;
 	private static final int ABOUT_REQUEST_CODE = 2;
 	private static final int TAKE_PHONE_REQUEST_CODE = 3;
@@ -50,7 +49,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	private File mCurrentFile;
 	private File mChoosedFile;
 	private LinearLayout mLlBack;
-	private long mTouchTime;
+
 	private View mActionSheetView;
 	private PopWindowUtil mPopWindowUtil;
 	private EditText mEdtFileName;
@@ -58,6 +57,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initDirecte();
 		setContentView(R.layout.activity_main);
 		// 友盟检查更新
 		UmengUpdateAgent.update(this);
@@ -73,6 +73,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 	private void initVariables() {
 		mFileList = new ArrayList<File>();
 		mResDir = FileUtil.getResDir(this);
+		Log.d("aaa", mResDir.getAbsolutePath());
 		mCurrentFile = mResDir;
 	}
 
@@ -303,15 +304,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 			getFileList();
 			return;
 		} else {
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - mTouchTime) >= WAIT_TIME) {
-				Toast.makeText(this, getString(R.string.once_press_quit), Toast.LENGTH_SHORT).show();
-				mTouchTime = currentTime;
-				return;
-			} else {
-				MobclickAgent.onKillProcess(this);
-				finish();
-			}
+			finish();
 		}
 		super.onBackPressed();
 	}

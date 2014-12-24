@@ -30,6 +30,7 @@ public class MusicDetailActivity extends ActivityBase {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initDirecte();
 		setContentView(R.layout.activity_music_detail);
 		initVariables();
 		initViews();

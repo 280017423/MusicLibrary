@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.listener.ImageLoadListener;
 import com.zsq.musiclibrary.util.AsyncImageLoader;
+import com.zsq.musiclibrary.util.ConstantSet;
+import com.zsq.musiclibrary.util.SharedPreferenceUtil;
 import com.zsq.musiclibrary.util.UIUtil;
 
 /**
@@ -37,7 +40,7 @@ import com.zsq.musiclibrary.util.UIUtil;
  */
 public class FolderAdapter extends BaseAdapter {
 	private static final int SPACE_VALUE = 10;
-	private static final int NUM_COLUMNS = 4;
+	private static int NUM_COLUMNS = 4;
 	private List<File> mFilesList;
 	private Activity mContext;
 	private int mImgSize;
@@ -57,6 +60,11 @@ public class FolderAdapter extends BaseAdapter {
 		this.mFilesList = dataList;
 		mGridView = gridView;
 		mImageLoader = new AsyncImageLoader();
+		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
+				ConstantSet.KEY_IS_LANDSCAPE);
+		if (isLandscape) {
+			NUM_COLUMNS = 8;
+		}
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
 		int width = metric.widthPixels;

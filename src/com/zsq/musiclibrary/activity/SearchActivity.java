@@ -79,6 +79,7 @@ public class SearchActivity extends ActivityBase implements OnClickListener, OnI
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initDirecte();
 		setContentView(R.layout.activity_search);
 		initVariables();
 		initView();

@@ -3,6 +3,7 @@ package com.zsq.musiclibrary.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -10,7 +11,9 @@ import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 import com.zsq.musiclibrary.listener.IDialogProtocol;
+import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.DialogManager;
+import com.zsq.musiclibrary.util.SharedPreferenceUtil;
 import com.zsq.musiclibrary.util.StringUtil;
 import com.zsq.musiclibrary.widget.CustomDialog.Builder;
 import com.zsq.musiclibrary.widget.LoadingUpView;
@@ -104,6 +107,16 @@ public class ActivityBase extends Activity implements IDialogProtocol {
 	@Override
 	public void onNegativeBtnClick(int id, DialogInterface dialog, int which) {
 
+	}
+
+	protected void initDirecte() {
+		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(this, ConstantSet.CONFIG_FILE,
+				ConstantSet.KEY_IS_LANDSCAPE);
+		if (isLandscape) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		} else {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}
 	}
 
 }
