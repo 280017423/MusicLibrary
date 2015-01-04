@@ -41,14 +41,28 @@ public class FileUtil {
 	 * @return File 本地资源目录
 	 */
 	public static File getResDir(Context context) {
-		String pathName = SharedPreferenceUtil.getStringValueByKey(context, ConstantSet.CONFIG_FILE,
-				ConstantSet.CUSTOM_DIR);
-		if (StringUtil.isNullOrEmpty(pathName)) {
-			pathName = ConstantSet.DEFAULT_PATH;
-		}
 		File downloadFile = null;
-		if (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			downloadFile = new File(Environment.getExternalStorageDirectory(), pathName);
+		// String pathName = SharedPreferenceUtil.getStringValueByKey(context,
+		// ConstantSet.CONFIG_FILE,
+		// ConstantSet.CUSTOM_DIR);
+		// if (StringUtil.isNullOrEmpty(pathName)) {
+		// pathName = ConstantSet.DEFAULT_PATH;
+		// }
+		// if
+		// (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+		// {
+		// downloadFile = new File(Environment.getExternalStorageDirectory(),
+		// pathName);
+		// }
+		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
+				ConstantSet.KEY_IS_LANDSCAPE);
+		if (isLandscape) {
+			downloadFile = new File("/external_sd/" + ConstantSet.PATH_HENGPU);
+		} else {
+			downloadFile = new File("/external_sd/" + ConstantSet.PATH_SHUPU);
+		}
+		if (!downloadFile.exists()) {
+			downloadFile.mkdirs();
 		}
 		return downloadFile;
 	}

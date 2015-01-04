@@ -14,6 +14,7 @@ public class AsyncImageLoader {
 
 	public Drawable loadDrawable(final String imageUrl, final int size, final ImageLoadListener imageCallback) {
 		final Handler handler = new Handler() {
+			@Override
 			public void handleMessage(Message message) {
 				imageCallback.imageLoaded((Bitmap) message.obj, imageUrl);
 			}
