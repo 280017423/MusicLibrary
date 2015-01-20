@@ -57,9 +57,9 @@ public class FileUtil {
 		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
 				ConstantSet.KEY_IS_LANDSCAPE);
 		if (isLandscape) {
-			downloadFile = new File("/external_sd/" + ConstantSet.PATH_HENGPU);
+			downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_HENGPU);
 		} else {
-			downloadFile = new File("/external_sd/" + ConstantSet.PATH_SHUPU);
+			downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_SHUPU);
 		}
 		if (!downloadFile.exists()) {
 			downloadFile.mkdirs();
