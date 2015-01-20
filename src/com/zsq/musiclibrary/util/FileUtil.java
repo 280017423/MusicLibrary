@@ -42,24 +42,24 @@ public class FileUtil {
 	 */
 	public static File getResDir(Context context) {
 		File downloadFile = null;
-		// String pathName = SharedPreferenceUtil.getStringValueByKey(context,
-		// ConstantSet.CONFIG_FILE,
-		// ConstantSet.CUSTOM_DIR);
-		// if (StringUtil.isNullOrEmpty(pathName)) {
-		// pathName = ConstantSet.DEFAULT_PATH;
-		// }
-		// if
-		// (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-		// {
-		// downloadFile = new File(Environment.getExternalStorageDirectory(),
-		// pathName);
-		// }
 		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
 				ConstantSet.KEY_IS_LANDSCAPE);
 		if (isLandscape) {
-			downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_HENGPU);
+			String pathHengpu = SharedPreferenceUtil.getStringValueByKey(context, ConstantSet.CONFIG_FILE,
+					ConstantSet.CUSTOM_HENGPU_DIR);
+			if (!StringUtil.isNullOrEmpty(pathHengpu)) {
+				downloadFile = new File(pathHengpu);
+			} else {
+				downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_HENGPU);
+			}
 		} else {
-			downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_SHUPU);
+			String pathShupu = SharedPreferenceUtil.getStringValueByKey(context, ConstantSet.CONFIG_FILE,
+					ConstantSet.CUSTOM_SHUPU_DIR);
+			if (!StringUtil.isNullOrEmpty(pathShupu)) {
+				downloadFile = new File(pathShupu);
+			} else {
+				downloadFile = new File("/mnt/external_sd/" + ConstantSet.PATH_SHUPU);
+			}
 		}
 		if (!downloadFile.exists()) {
 			downloadFile.mkdirs();

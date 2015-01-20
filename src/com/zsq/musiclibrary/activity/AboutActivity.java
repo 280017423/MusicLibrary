@@ -4,6 +4,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.zsq.musiclibrary.R;
 import com.zsq.musiclibrary.util.ConstantSet;
+import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.SharedPreferenceUtil;
 import com.zsq.musiclibrary.util.StringUtil;
 
@@ -45,6 +47,15 @@ public class AboutActivity extends ActivityBase implements OnClickListener {
 
 	private void setListener() {
 		mLlBack.setOnClickListener(this);
+		findViewById(R.id.iv_icon).setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				mLlPath.setVisibility(View.VISIBLE);
+				mEdtPath.setText(FileUtil.getResDir(AboutActivity.this).getAbsolutePath());
+				return true;
+			}
+		});
 	}
 
 	private void initView() {
@@ -67,16 +78,20 @@ public class AboutActivity extends ActivityBase implements OnClickListener {
 			case R.id.title_with_back_title_btn_left:
 				back();
 				break;
-			case R.id.iv_icon:
-				changeDir();
-				break;
 			case R.id.btn_path_name:
 				String path = mEdtPath.getText().toString().trim();
 				if (StringUtil.isNullOrEmpty(path)) {
 					Toast.makeText(this, getString(R.string.input_custom_dir), Toast.LENGTH_SHORT).show();
 				} else {
-					SharedPreferenceUtil.saveValue(AboutActivity.this, ConstantSet.CONFIG_FILE, ConstantSet.CUSTOM_DIR,
-							path);
+					boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(this, ConstantSet.CONFIG_FILE,
+							ConstantSet.KEY_IS_LANDSCAPE);
+					if (isLandscape) {
+						SharedPreferenceUtil.saveValue(AboutActivity.this, ConstantSet.CONFIG_FILE,
+								ConstantSet.CUSTOM_HENGPU_DIR, path);
+					} else {
+						SharedPreferenceUtil.saveValue(AboutActivity.this, ConstantSet.CONFIG_FILE,
+								ConstantSet.CUSTOM_SHUPU_DIR, path);
+					}
 					setResult(RESULT_OK);
 					finish();
 				}
@@ -84,21 +99,6 @@ public class AboutActivity extends ActivityBase implements OnClickListener {
 				break;
 			default:
 				break;
-		}
-	}
-
-	private void changeDir() {
-		long currentTime = System.currentTimeMillis();
-		if (Math.abs(currentTime - mSystemCurrentTime) <= 2 * ConstantSet.INTERVAL_TIME) {
-			CLICK_COUNT += 1;
-			mSystemCurrentTime = currentTime;
-		} else {
-			CLICK_COUNT = 0;
-			mSystemCurrentTime = currentTime;
-		}
-		if (CLICK_COUNT == CLICK_COUNT_FIVE) {
-			CLICK_COUNT = 0;
-			mLlPath.setVisibility(View.VISIBLE);
 		}
 	}
 

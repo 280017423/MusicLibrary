@@ -12,6 +12,8 @@ public class ConstantSet {
 	public static final long INTERVAL_TIME = 6 * 1000;
 	public static final String CONFIG_FILE = "CONFIG_FILE";
 	public static final String CUSTOM_DIR = "CUSTOM_DIR";
+	public static final String CUSTOM_HENGPU_DIR = "CUSTOM_HENGPU_DIR";
+	public static final String CUSTOM_SHUPU_DIR = "CUSTOM_SHUPU_DIR";
 	public static final String KEY_IS_LANDSCAPE = "KEY_IS_LANDSCAPE";
 	public static final String PATH_HENGPU = "hengpu";
 	public static final String PATH_SHUPU = "shupu";
