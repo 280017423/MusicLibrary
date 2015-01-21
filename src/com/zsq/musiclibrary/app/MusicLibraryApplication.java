@@ -1,7 +1,11 @@
 package com.zsq.musiclibrary.app;
 
 import android.app.Application;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+
+import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.crashreport.CrashReport.UserStrategy;
 
 /**
  * 
@@ -23,7 +27,21 @@ public class MusicLibraryApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		initCrashReport();
 		Log.d(TAG, "FileApplication, onCreate");
+	}
+
+	private void initCrashReport() {
+		UserStrategy strategy = new UserStrategy(getApplicationContext());
+		strategy.setAppChannel("");
+		try {
+			String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			strategy.setAppVersion(versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		strategy.setAppReportDelay(5000); // 设置SDK处理延时，毫秒
+		CrashReport.initCrashReport(getApplicationContext(), "900001795", false, strategy);
 	}
 
 }
