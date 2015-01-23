@@ -280,7 +280,6 @@ public class LoadingUpView {
 	}
 
 	private void addLoadingView(String msg) {
-		msg = "";
 		if (mIsFrameLayoutParentView) {
 			if (mScreenWidth == 0) {
 				getDisplayConfig();
@@ -339,7 +338,6 @@ public class LoadingUpView {
 	 */
 	public void showProgressDialog(final Activity act, String msg) {
 		Activity activity = act;
-		msg = "";
 		if (act.isFinishing()) {
 			return;
 		}
@@ -367,8 +365,7 @@ public class LoadingUpView {
 				return;
 			}
 			mProgressdDialog.show();
-			LayoutInflater mLayoutInflater = LayoutInflater.from(activity);
-			View view = mLayoutInflater.inflate(R.layout.view_popup, null);
+			View view = View.inflate(activity, R.layout.view_popup, null);
 			ImageView mRetote = (ImageView) view.findViewById(R.id.img_popup);
 			TextView mLoadMsg = (TextView) view.findViewById(R.id.tv_popup);
 

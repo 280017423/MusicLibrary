@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +28,7 @@ import com.zsq.musiclibrary.util.AsyncImageLoader;
 import com.zsq.musiclibrary.util.ConstantSet;
 import com.zsq.musiclibrary.util.SharedPreferenceUtil;
 import com.zsq.musiclibrary.util.UIUtil;
+import com.zsq.musiclibrary.widget.HorizontalListView;
 
 /**
  * 文件列表适配器
@@ -37,13 +37,13 @@ import com.zsq.musiclibrary.util.UIUtil;
  * @since 2013-03-12 下午04:37:29
  * @version 1.0
  */
-public class FolderAdapter extends BaseAdapter {
-	private static final int SPACE_VALUE = 10;
-	private static int NUM_COLUMNS = 4;
+public class ThumbAdapter extends BaseAdapter {
+	private final int SPACE_VALUE = 10;
+	private int NUM_COLUMNS = 4;
 	private List<File> mFilesList;
 	private Activity mContext;
 	private int mImgSize;
-	private GridView mGridView;
+	private HorizontalListView mListView;
 	private AsyncImageLoader mImageLoader;
 
 	/**
@@ -54,10 +54,10 @@ public class FolderAdapter extends BaseAdapter {
 	 * @param dataList
 	 *            数据列表
 	 */
-	public FolderAdapter(Activity context, List<File> dataList, GridView gridView) {
+	public ThumbAdapter(Activity context, List<File> dataList, HorizontalListView listView) {
 		this.mContext = context;
 		this.mFilesList = dataList;
-		mGridView = gridView;
+		mListView = listView;
 		mImageLoader = new AsyncImageLoader();
 		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
 				ConstantSet.KEY_IS_LANDSCAPE);
@@ -95,9 +95,9 @@ public class FolderAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		viewHode view = new viewHode();
 		if (convertView == null) {
-			convertView = View.inflate(mContext, R.layout.view_folder_item, null);
-			view.mName = (TextView) convertView.findViewById(R.id.tv_folder_name);
-			view.mIcon = (ImageView) convertView.findViewById(R.id.iv_folder_img);
+			convertView = View.inflate(mContext, R.layout.view_thumb_item, null);
+			view.mName = (TextView) convertView.findViewById(R.id.tv_thumb_name);
+			view.mIcon = (ImageView) convertView.findViewById(R.id.iv_thumb_photo);
 			convertView.setTag(view);
 		} else {
 			view = (viewHode) convertView.getTag();
@@ -111,21 +111,17 @@ public class FolderAdapter extends BaseAdapter {
 		File file = mFilesList.get(position);
 		view.mIcon.setTag(file.getAbsolutePath());
 		if (null != file) {
-			if (file.isDirectory()) {
-				view.mIcon.setImageResource(R.drawable.format_folder);
-			} else {
-				view.mIcon.setImageResource(R.drawable.format_picture);
-				mImageLoader.loadDrawable(file.getAbsolutePath(), mImgSize, new ImageLoadListener() {
+			view.mIcon.setImageResource(R.drawable.format_picture);
+			mImageLoader.loadDrawable(file.getAbsolutePath(), mImgSize, new ImageLoadListener() {
 
-					@Override
-					public void imageLoaded(Bitmap bitmap, String imageUrl) {
-						ImageView imageViewByTag = (ImageView) mGridView.findViewWithTag(imageUrl);
-						if (imageViewByTag != null) {
-							imageViewByTag.setImageBitmap(bitmap);
-						}
+				@Override
+				public void imageLoaded(Bitmap bitmap, String imageUrl) {
+					ImageView imageViewByTag = (ImageView) mListView.findViewWithTag(imageUrl);
+					if (imageViewByTag != null) {
+						imageViewByTag.setImageBitmap(bitmap);
 					}
-				});
-			}
+				}
+			});
 			view.mName.setText(file.getName());
 		}
 		return convertView;

@@ -18,12 +18,9 @@ import com.zsq.musiclibrary.util.StringUtil;
 
 public class AboutActivity extends ActivityBase implements OnClickListener {
 
-	private static final int CLICK_COUNT_FIVE = 5;
-	private static int CLICK_COUNT;
 	private LinearLayout mLlBack;
 	private LinearLayout mLlPath;
 	private EditText mEdtPath;
-	private long mSystemCurrentTime;
 	private String mVersionName;
 
 	@Override
@@ -36,7 +33,6 @@ public class AboutActivity extends ActivityBase implements OnClickListener {
 	}
 
 	private void initVariables() {
-		mSystemCurrentTime = System.currentTimeMillis();
 		mVersionName = getString(R.string.unknow_version_name);
 		try {
 			mVersionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

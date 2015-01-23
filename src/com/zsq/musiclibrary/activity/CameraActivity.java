@@ -22,29 +22,25 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zsq.musiclibrary.R;
+import com.zsq.musiclibrary.adapter.ThumbAdapter;
 import com.zsq.musiclibrary.util.FileUtil;
 import com.zsq.musiclibrary.util.ImageUtil;
 import com.zsq.musiclibrary.util.StringUtil;
 import com.zsq.musiclibrary.util.UIUtil;
-import com.zsq.musiclibrary.widget.BadgeView;
 import com.zsq.musiclibrary.widget.CustomDialog.Builder;
+import com.zsq.musiclibrary.widget.HorizontalListView;
+import com.zsq.musiclibrary.widget.LoadingUpView;
 
 public class CameraActivity extends ActivityBase implements SurfaceHolder.Callback, OnClickListener {
 
@@ -61,49 +57,16 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	private boolean mHasStartPreview;
 	private MediaPlayer mMediaPlayer;
 	private EditText mEdtFileName;
-	private ImageView mIvThumb;
 	private TextView mBtnTakePhone;
-	private BadgeView mBadgeView;
+	private LoadingUpView mLoadingUpView;
+	private ThumbAdapter mThumbAdapter;
+	private HorizontalListView mHorizontalListView;
 	private PictureCallback mPictureCallBack = new Camera.PictureCallback() {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			new SavePictureTask().execute(data);
 		}
 	};
-
-	private Handler mHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-				case ACTION_SAVE_PHOTO_SUCCESS:
-					if (null != msg.obj) {
-						Bitmap thumbnail = (Bitmap) msg.obj;
-						mIvThumb.setImageBitmap(thumbnail);
-					}
-					if (View.VISIBLE != mIvThumb.getVisibility()) {
-						startAnim();
-					}
-					refreashThumbView();
-					refreashBadgeView();
-					break;
-
-				default:
-					break;
-			}
-			super.handleMessage(msg);
-		}
-
-	};
-
-	private void startAnim() {
-		final ScaleAnimation animation = new ScaleAnimation(
-				0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-		animation.setDuration(ANIMATION_DURATION);
-		mIvThumb.setAnimation(animation);
-		mBadgeView.setAnimation(animation);
-		animation.start();
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +75,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_camera);
+		mLoadingUpView = new LoadingUpView(this, true);
 		mCamera = Camera.open();
 		mPhotosList = new ArrayList<File>();
 		if (UIUtil.isLandscape(this)) {
@@ -121,41 +85,18 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 			IMG_PICTURE_WIDTH = UIUtil.getWidthPixels(this);
 			IMG_PICTURE_HEIGHT = UIUtil.getHeightPixels(this);
 		}
-
 		initViews();
 	}
 
 	private void initViews() {
+		mHorizontalListView = (HorizontalListView) findViewById(R.id.lv_thumb_photo);
+		mThumbAdapter = new ThumbAdapter(this, mPhotosList, mHorizontalListView);
+		mHorizontalListView.setAdapter(mThumbAdapter);
 		mBtnTakePhone = (TextView) findViewById(R.id.btn_take_photo);
 		mSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(this);
 		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		mIvThumb = (ImageView) findViewById(R.id.iv_thumb_photo);
-		mBadgeView = new BadgeView(this, mIvThumb);
-		mBadgeView.setGravity(Gravity.CENTER);
-		mBadgeView.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-		mBadgeView.setBackgroundResource(R.drawable.choose_no_bg);
-		mBadgeView.setBadgeMargin(10, 8);
-		refreashBadgeView();
-	}
-
-	private void refreashThumbView() {
-		if (null == mPhotosList || mPhotosList.isEmpty()) {
-			mIvThumb.setVisibility(View.GONE);
-		} else {
-			mIvThumb.setVisibility(View.VISIBLE);
-		}
-	}
-
-	private void refreashBadgeView() {
-		if (null == mPhotosList || mPhotosList.isEmpty()) {
-			mBadgeView.hide();
-		} else {
-			int size = mPhotosList.size();
-			mBadgeView.show();
-			mBadgeView.setText(size + "");
-		}
 	}
 
 	@Override
@@ -261,14 +202,11 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 
 		@Override
 		protected void onPostExecute(Bitmap thumbnail) {
+			mLoadingUpView.dismiss();
 			mBtnTakePhone.setEnabled(true);
-			Message msg = mHandler.obtainMessage();
-			msg.what = ACTION_SAVE_PHOTO_SUCCESS;
-			msg.obj = thumbnail;
-			mHandler.sendMessage(msg);
+			mThumbAdapter.notifyDataSetChanged();
 			super.onPostExecute(thumbnail);
 		}
-
 	}
 
 	private void shootSound() {
@@ -299,6 +237,7 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 				if (null != mCamera) {
 					shootSound();
 					mBtnTakePhone.setEnabled(false);
+					mLoadingUpView.showPopup("正在处理图片...");
 					mCamera.takePicture(null, null, mPictureCallBack);
 				}
 				break;
