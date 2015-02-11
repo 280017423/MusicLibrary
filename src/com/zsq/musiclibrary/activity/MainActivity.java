@@ -96,6 +96,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 		mActionSheetView.findViewById(R.id.rl_pop_view).setOnClickListener(this);
 		mActionSheetView.findViewById(R.id.tv_cation_rename).setOnClickListener(this);
 		mActionSheetView.findViewById(R.id.tv_cation_delete).setOnClickListener(this);
+		mActionSheetView.findViewById(R.id.tv_cation_cancel).setOnClickListener(this);
 	}
 
 	private void setListener() {
@@ -183,6 +184,7 @@ public class MainActivity extends ActivityBase implements OnClickListener, OnIte
 				showDialog(DIALOG_ACTION_DELETE);
 				break;
 			case R.id.rl_pop_view:
+			case R.id.tv_cation_cancel:
 				mPopWindowUtil.dissmiss();
 				break;
 			case R.id.tv_take_photo:

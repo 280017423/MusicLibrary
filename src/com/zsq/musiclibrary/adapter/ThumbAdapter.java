@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -39,7 +40,7 @@ import com.zsq.musiclibrary.widget.HorizontalListView;
  */
 public class ThumbAdapter extends BaseAdapter {
 	private final int SPACE_VALUE = 10;
-	private int NUM_COLUMNS = 4;
+	private int NUM_COLUMNS = 3;
 	private List<File> mFilesList;
 	private Activity mContext;
 	private int mImgSize;
@@ -62,7 +63,7 @@ public class ThumbAdapter extends BaseAdapter {
 		boolean isLandscape = SharedPreferenceUtil.getBooleanValueByKey(context, ConstantSet.CONFIG_FILE,
 				ConstantSet.KEY_IS_LANDSCAPE);
 		if (isLandscape) {
-			NUM_COLUMNS = 8;
+			NUM_COLUMNS = 6;
 		}
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -92,12 +93,13 @@ public class ThumbAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		viewHode view = new viewHode();
 		if (convertView == null) {
 			convertView = View.inflate(mContext, R.layout.view_thumb_item, null);
 			view.mName = (TextView) convertView.findViewById(R.id.tv_thumb_name);
 			view.mIcon = (ImageView) convertView.findViewById(R.id.iv_thumb_photo);
+			view.mIbtnDelete = (ImageView) convertView.findViewById(R.id.ibtn_delete);
 			convertView.setTag(view);
 		} else {
 			view = (viewHode) convertView.getTag();
@@ -107,8 +109,23 @@ public class ThumbAdapter extends BaseAdapter {
 		layoutParams.width = mImgSize;
 		layoutParams.height = mImgSize;
 		view.mIcon.setLayoutParams(layoutParams);
+		final File file = mFilesList.get(position);
+		if (position == getCount() - 1) {
+			view.mIbtnDelete.setVisibility(View.VISIBLE);
+		} else {
+			view.mIbtnDelete.setVisibility(View.GONE);
+		}
 
-		File file = mFilesList.get(position);
+		view.mIbtnDelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mFilesList.remove(position);
+				file.delete();
+				notifyDataSetChanged();
+			}
+		});
+
 		view.mIcon.setTag(file.getAbsolutePath());
 		if (null != file) {
 			view.mIcon.setImageResource(R.drawable.format_picture);
@@ -130,5 +147,6 @@ public class ThumbAdapter extends BaseAdapter {
 	class viewHode {
 		TextView mName;
 		ImageView mIcon;
+		ImageView mIbtnDelete;
 	}
 }

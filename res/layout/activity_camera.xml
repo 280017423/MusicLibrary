@@ -8,6 +8,17 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
+    <com.zsq.musiclibrary.widget.HorizontalListView
+        android:id="@+id/lv_thumb_photo"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:background="#55000000"
+        android:divider="@android:color/transparent"
+        android:fadingEdgeLength="5dp"
+        android:requiresFadingEdge="horizontal"
+        widget:dividerWidth="3dp" />
+
     <ImageView
         android:id="@+id/autofoucs"
         android:layout_width="156dp"
@@ -22,7 +33,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="150dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/button_main_selector"
         android:clickable="true"
@@ -65,16 +76,5 @@
         android:text="@string/title_back_text"
         android:textColor="@color/white"
         android:textSize="16sp" />
-
-    <com.zsq.musiclibrary.widget.HorizontalListView
-        android:id="@+id/lv_thumb_photo"
-        android:layout_width="fill_parent"
-        android:layout_height="120dp"
-        android:layout_alignParentBottom="true"
-        android:background="#55000000"
-        android:divider="@android:color/transparent"
-        android:fadingEdgeLength="5dp"
-        android:requiresFadingEdge="horizontal"
-        widget:dividerWidth="3dp" />
 
 </RelativeLayout>

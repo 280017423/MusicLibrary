@@ -15,7 +15,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -145,16 +144,16 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 	public boolean onTouchEvent(MotionEvent event) {
 		if (mCamera == null)
 			return true;
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			mCamera.autoFocus(new AutoFocusCallback() {
-				@Override
-				public void onAutoFocus(boolean success, Camera arg1) {
-					if (success) {
-					}
-				}
-			});
-
-		}
+		// if (event.getAction() == MotionEvent.ACTION_UP) {
+		// mCamera.autoFocus(new AutoFocusCallback() {
+		// @Override
+		// public void onAutoFocus(boolean success, Camera arg1) {
+		// if (success) {
+		// }
+		// }
+		// });
+		//
+		// }
 		return true;
 	}
 
@@ -164,9 +163,9 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 		protected Bitmap doInBackground(byte[]... params) {
 			Bitmap thumbnail = null;
 			FileOutputStream fos = null;
-			if (mCamera != null) {
+			File file = ImageUtil.getOutputMediaFile(CameraActivity.this);
+			if (mCamera != null && null != file) {
 				try {
-					File file = ImageUtil.getOutputMediaFile(CameraActivity.this);
 					fos = new FileOutputStream(file);
 					Bitmap bitmap = Bitmap.createScaledBitmap(
 							BitmapFactory.decodeByteArray(params[0], 0, params[0].length), IMG_PICTURE_HEIGHT,
@@ -177,7 +176,6 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					if (!UIUtil.isLandscape(CameraActivity.this)) {
 						m.setRotate(90); // 旋转90度
 					}
-
 					Bitmap newBitMap = Bitmap.createBitmap(bitmap, 0, 0, width, height, m, true);// 从新生成图片
 					bitmap.recycle();
 					newBitMap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -191,11 +189,15 @@ public class CameraActivity extends ActivityBase implements SurfaceHolder.Callba
 					e.printStackTrace();
 				} finally {
 					try {
-						fos.close();
+						if (null != fos) {
+							fos.close();
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
+			} else {
+				initCamera();
 			}
 			return thumbnail;
 		}

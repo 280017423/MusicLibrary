@@ -15,6 +15,17 @@
         android:contentDescription="@null"
         android:scaleType="fitXY" />
 
+    <ImageButton
+        android:id="@+id/ibtn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:contentDescription="@null"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:src="@drawable/delete_photo" />
+
     <TextView
         android:id="@+id/tv_thumb_name"
         android:layout_width="wrap_content"
